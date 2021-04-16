@@ -59,3 +59,23 @@ Route::get('/unidades/export/csv', 'UnidadeController@exportcsv')->name('unidade
 Route::get('/unidades/export/pdf', 'UnidadeController@exportpdf')->name('unidades.export.pdf');
 Route::get('/unidades/autocomplete', 'UnidadeController@autocomplete')->name('unidades.autocomplete');
 Route::resource('/unidades', 'UnidadeController');
+
+/* Sintomas */
+Route::get('/sintomas/export/csv', 'SintomaController@exportcsv')->name('sintomas.export.csv');
+Route::get('/sintomas/export/pdf', 'SintomaController@exportpdf')->name('sintomas.export.pdf');
+Route::resource('/sintomas', 'SintomaController');
+
+/* Sintomas do cadastro*/
+Route::get('/sintomascadastros/export/csv', 'SintomasCadastroController@exportcsv')->name('sintomascadastros.export.csv');
+Route::get('/sintomascadastros/export/pdf', 'SintomasCadastroController@exportpdf')->name('sintomascadastros.export.pdf');
+Route::resource('/sintomascadastros', 'SintomasCadastroController');
+
+/* Sintomas do cadastro*/
+Route::get('/doencasbases/export/csv', 'DoencasBaseController@exportcsv')->name('doencasbases.export.csv');
+Route::get('/doencasbases/export/pdf', 'DoencasBaseController@exportpdf')->name('doencasbases.export.pdf');
+Route::resource('/doencasbases', 'DoencasBaseController');
+
+/* Comorbidades */
+Route::get('/comorbidades/export/csv', 'ComorbidadeController@exportcsv')->name('comorbidades.export.csv');
+Route::get('/comorbidades/export/pdf', 'ComorbidadeController@exportpdf')->name('comorbidades.export.pdf');
+Route::resource('/comorbidades', 'ComorbidadeController');

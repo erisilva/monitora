@@ -119,7 +119,7 @@ class PermissionsTableSeeder extends Seeder
             'description' => 'Exportação de dados dos distritos',
         ]);
 
-                //unidades
+        //unidades
         DB::table('permissions')->insert([
             'name' => 'unidade-index',
             'description' => 'Lista de unidades',
@@ -144,5 +144,110 @@ class PermissionsTableSeeder extends Seeder
             'name' => 'unidade-export',
             'description' => 'Exportação de dados das unidades',
         ]);
+
+
+        //sintomas
+        DB::table('permissions')->insert([
+            'name' => 'sintoma-index',
+            'description' => 'Lista de sintomas',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma-create',
+            'description' => 'Registrar novo sintoma',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma-edit',
+            'description' => 'Alterar dados do sintoma',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma-delete',
+            'description' => 'Excluir sintoma',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma-show',
+            'description' => 'Mostrar dados do sintoma',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma-export',
+            'description' => 'Exportação de dados dos sintomas',
+        ]);
+
+        //sintomas do cadastro
+        DB::table('permissions')->insert([
+            'name' => 'sintoma_cadastro-index',
+            'description' => 'Lista de sintomas',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma_cadastro-create',
+            'description' => 'Registrar novo sintoma do cadastro',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma_cadastro-edit',
+            'description' => 'Alterar dados do sintoma do cadastro',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma_cadastro-delete',
+            'description' => 'Excluir sintoma do cadastro',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma_cadastro-show',
+            'description' => 'Mostrar dados do sintoma do cadastro',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'sintoma_cadastro-export',
+            'description' => 'Exportação de dados dos sintomas do cadastro',
+        ]);
+
+        //doenças base
+        DB::table('permissions')->insert([
+            'name' => 'doencasbase-index',
+            'description' => 'Lista de doenças de base',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'doencasbase-create',
+            'description' => 'Registrar novo doença de base do cadastro',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'doencasbase-edit',
+            'description' => 'Alterar dados do doença de base do cadastro',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'doencasbase-delete',
+            'description' => 'Excluir doença de base do cadastro',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'doencasbase-show',
+            'description' => 'Mostrar dados do doença de base do cadastro',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'doencasbase-export',
+            'description' => 'Exportação de dados des doenças de base do cadastro',
+        ]);
+
+        //comorbidades
+        DB::table('permissions')->insert([
+            'name' => 'comorbidade-index',
+            'description' => 'Lista de comorbidades',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'comorbidade-create',
+            'description' => 'Registrar novo comorbidade',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'comorbidade-edit',
+            'description' => 'Alterar dados do comorbidade',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'comorbidade-delete',
+            'description' => 'Excluir comorbidade',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'comorbidade-show',
+            'description' => 'Mostrar dados do comorbidade',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'comorbidade-export',
+            'description' => 'Exportação de dados dos comorbidades',
+        ]);        
     }
 }

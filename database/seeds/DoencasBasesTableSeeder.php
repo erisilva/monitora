@@ -11,10 +11,10 @@ class DoencasBasesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('doencas_bases')->insert(['id' => 1, 'nome' => 'Doença Base Teste 1']);
-        DB::table('doencas_bases')->insert(['id' => 2, 'nome' => 'Doença Base Teste 2']);
-        DB::table('doencas_bases')->insert(['id' => 3, 'nome' => 'Doença Base Teste 3']);
-        DB::table('doencas_bases')->insert(['id' => 4, 'nome' => 'Doença Base Teste 4']);
-        DB::table('doencas_bases')->insert(['id' => 5, 'nome' => 'Doença Base Teste 5']);
+        DB::table('doencas_bases')->insert(['id' => 1, 'descricao' => 'Doença Base Teste 1']);
+        DB::table('doencas_bases')->insert(['id' => 2, 'descricao' => 'Doença Base Teste 2']);
+        DB::table('doencas_bases')->insert(['id' => 3, 'descricao' => 'Doença Base Teste 3']);
+        DB::table('doencas_bases')->insert(['id' => 4, 'descricao' => 'Doença Base Teste 4']);
+        DB::table('doencas_bases')->insert(['id' => 5, 'descricao' => 'Doença Base Teste 5']);
     }
 }

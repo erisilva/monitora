@@ -47,6 +47,10 @@
                           <a class="dropdown-item" href="{{ route('users.index') }}"><i class="fas fa-users-cog"></i> Operadores do Sistema</a>
                           <a class="dropdown-item" href="{{ route('unidades.index') }}"><i class="fas fa-cog"></i> Unidades</a>
                           <a class="dropdown-item" href="{{ route('distritos.index') }}"><i class="fas fa-cog"></i> Distritos</a>
+                          <a class="dropdown-item" href="{{ route('sintomas.index') }}"><i class="fas fa-cog"></i> Sintomas (Monitoramento)</a>
+                          <a class="dropdown-item" href="{{ route('doencasbases.index') }}"><i class="fas fa-cog"></i> Doenças Base (Monitoramento)</a>
+                          <a class="dropdown-item" href="{{ route('sintomascadastros.index') }}"><i class="fas fa-cog"></i> Sintomas Iniciais (Cadastro)</a>
+                          <a class="dropdown-item" href="{{ route('comorbidades.index') }}"><i class="fas fa-cog"></i> Comorbidades (Cadastro)</a>
                         </div>
                     </li>                    
                 </ul>

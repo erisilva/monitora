@@ -19,6 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionsTableSeeder::class);
         $this->call(DistritosTableSeeder::class);
         $this->call(UnidadesTableSeeder::class);
+        $this->call(SintomasTableSeeder::class);
+        $this->call(SintomasCadastrosTableSeeder::class);
+        $this->call(DoencasBasesTableSeeder::class);
+        $this->call(ComorbidadesTableSeeder::class);
         
 
 

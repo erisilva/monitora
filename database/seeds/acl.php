@@ -77,7 +77,34 @@ class acl extends Seeder
 		$unidade_delete = Permission::where('name', '=', 'unidade-delete')->get()->first();
 		$unidade_show = Permission::where('name', '=', 'unidade-show')->get()->first();  
 		$unidade_export = Permission::where('name', '=', 'unidade-export')->get()->first();
-
+		// para sintomas
+		$sintoma_index = Permission::where('name', '=', 'sintoma-index')->get()->first(); 
+		$sintoma_create = Permission::where('name', '=', 'sintoma-create')->get()->first();
+		$sintoma_edit = Permission::where('name', '=', 'sintoma-edit')->get()->first();  
+		$sintoma_delete = Permission::where('name', '=', 'sintoma-delete')->get()->first();
+		$sintoma_show = Permission::where('name', '=', 'sintoma-show')->get()->first();  
+		$sintoma_export = Permission::where('name', '=', 'sintoma-export')->get()->first();
+		// para sintomas do cadastro ou iniciais
+		$sintoma_cadastro_index = Permission::where('name', '=', 'sintoma_cadastro-index')->get()->first(); 
+		$sintoma_cadastro_create = Permission::where('name', '=', 'sintoma_cadastro-create')->get()->first();
+		$sintoma_cadastro_edit = Permission::where('name', '=', 'sintoma_cadastro-edit')->get()->first();  
+		$sintoma_cadastro_delete = Permission::where('name', '=', 'sintoma_cadastro-delete')->get()->first();
+		$sintoma_cadastro_show = Permission::where('name', '=', 'sintoma_cadastro-show')->get()->first();  
+		$sintoma_cadastro_export = Permission::where('name', '=', 'sintoma_cadastro-export')->get()->first();
+		// para doenças de base
+		$doencasbase_index = Permission::where('name', '=', 'doencasbase-index')->get()->first(); 
+		$doencasbase_create = Permission::where('name', '=', 'doencasbase-create')->get()->first();
+		$doencasbase_edit = Permission::where('name', '=', 'doencasbase-edit')->get()->first();  
+		$doencasbase_delete = Permission::where('name', '=', 'doencasbase-delete')->get()->first();
+		$doencasbase_show = Permission::where('name', '=', 'doencasbase-show')->get()->first();  
+		$doencasbase_export = Permission::where('name', '=', 'doencasbase-export')->get()->first();
+		// para sintomas
+		$comorbidade_index = Permission::where('name', '=', 'comorbidade-index')->get()->first(); 
+		$comorbidade_create = Permission::where('name', '=', 'comorbidade-create')->get()->first();
+		$comorbidade_edit = Permission::where('name', '=', 'comorbidade-edit')->get()->first();  
+		$comorbidade_delete = Permission::where('name', '=', 'comorbidade-delete')->get()->first();
+		$comorbidade_show = Permission::where('name', '=', 'comorbidade-show')->get()->first();  
+		$comorbidade_export = Permission::where('name', '=', 'comorbidade-export')->get()->first();
 
 		// salva os relacionamentos entre perfil e suas permissões
 		
@@ -115,6 +142,34 @@ class acl extends Seeder
 		$administrador_perfil->permissions()->attach($unidade_delete);
 		$administrador_perfil->permissions()->attach($unidade_show);
 		$administrador_perfil->permissions()->attach($unidade_export);
+		# sintomas
+		$administrador_perfil->permissions()->attach($sintoma_index);
+		$administrador_perfil->permissions()->attach($sintoma_create);
+		$administrador_perfil->permissions()->attach($sintoma_edit);
+		$administrador_perfil->permissions()->attach($sintoma_delete);
+		$administrador_perfil->permissions()->attach($sintoma_show);
+		$administrador_perfil->permissions()->attach($sintoma_export);
+		# sintomas iniciais ou do cadastro
+		$administrador_perfil->permissions()->attach($sintoma_cadastro_index);
+		$administrador_perfil->permissions()->attach($sintoma_cadastro_create);
+		$administrador_perfil->permissions()->attach($sintoma_cadastro_edit);
+		$administrador_perfil->permissions()->attach($sintoma_cadastro_delete);
+		$administrador_perfil->permissions()->attach($sintoma_cadastro_show);
+		$administrador_perfil->permissions()->attach($sintoma_cadastro_export);
+		# doenças de base
+		$administrador_perfil->permissions()->attach($doencasbase_index);
+		$administrador_perfil->permissions()->attach($doencasbase_create);
+		$administrador_perfil->permissions()->attach($doencasbase_edit);
+		$administrador_perfil->permissions()->attach($doencasbase_delete);
+		$administrador_perfil->permissions()->attach($doencasbase_show);
+		$administrador_perfil->permissions()->attach($doencasbase_export);
+		# comorbidades
+		$administrador_perfil->permissions()->attach($comorbidade_index);
+		$administrador_perfil->permissions()->attach($comorbidade_create);
+		$administrador_perfil->permissions()->attach($comorbidade_edit);
+		$administrador_perfil->permissions()->attach($comorbidade_delete);
+		$administrador_perfil->permissions()->attach($comorbidade_show);
+		$administrador_perfil->permissions()->attach($comorbidade_export);
 
 
 		// o gerente (diretor) pode gerenciar os operadores do sistema
@@ -135,6 +190,31 @@ class acl extends Seeder
 		$gerente_perfil->permissions()->attach($unidade_edit);
 		$gerente_perfil->permissions()->attach($unidade_show);
 		$gerente_perfil->permissions()->attach($unidade_export);
+		# sintomas
+		$gerente_perfil->permissions()->attach($sintoma_index);
+		$gerente_perfil->permissions()->attach($sintoma_create);
+		$gerente_perfil->permissions()->attach($sintoma_edit);
+		$gerente_perfil->permissions()->attach($sintoma_show);
+		$gerente_perfil->permissions()->attach($sintoma_export);
+		# sintomas iniciais ou do cadastro
+		$gerente_perfil->permissions()->attach($sintoma_cadastro_index);
+		$gerente_perfil->permissions()->attach($sintoma_cadastro_create);
+		$gerente_perfil->permissions()->attach($sintoma_cadastro_edit);
+		$gerente_perfil->permissions()->attach($sintoma_cadastro_show);
+		$gerente_perfil->permissions()->attach($sintoma_cadastro_export);
+		# doenças base
+		$gerente_perfil->permissions()->attach($doencasbase_index);
+		$gerente_perfil->permissions()->attach($doencasbase_create);
+		$gerente_perfil->permissions()->attach($doencasbase_edit);
+		$gerente_perfil->permissions()->attach($doencasbase_show);
+		$gerente_perfil->permissions()->attach($doencasbase_export);
+		# comorbidades
+		$gerente_perfil->permissions()->attach($comorbidade_index);
+		$gerente_perfil->permissions()->attach($comorbidade_create);
+		$gerente_perfil->permissions()->attach($comorbidade_edit);
+		$gerente_perfil->permissions()->attach($comorbidade_show);
+		$gerente_perfil->permissions()->attach($comorbidade_export);
+
 
 
 		// o operador é o nível de operação do sistema não pode criar
@@ -146,10 +226,27 @@ class acl extends Seeder
 		$operador_perfil->permissions()->attach($distrito_index);
 		$operador_perfil->permissions()->attach($distrito_show);
 		$operador_perfil->permissions()->attach($distrito_export);
+		#unidade
 		$operador_perfil->permissions()->attach($unidade_index);
 		$operador_perfil->permissions()->attach($unidade_show);
 		$operador_perfil->permissions()->attach($unidade_export);
-		$operador_perfil->permissions()->attach($unidade_create);
+		#sintoma
+		$operador_perfil->permissions()->attach($sintoma_index);
+		$operador_perfil->permissions()->attach($sintoma_show);
+		$operador_perfil->permissions()->attach($sintoma_export);
+		#sintoma
+		$operador_perfil->permissions()->attach($sintoma_cadastro_index);
+		$operador_perfil->permissions()->attach($sintoma_cadastro_show);
+		$operador_perfil->permissions()->attach($sintoma_cadastro_export);
+		#doenças de base
+		$operador_perfil->permissions()->attach($doencasbase_index);
+		$operador_perfil->permissions()->attach($doencasbase_show);
+		$operador_perfil->permissions()->attach($doencasbase_export);
+		#comorbidades
+		$operador_perfil->permissions()->attach($comorbidade_index);
+		$operador_perfil->permissions()->attach($comorbidade_show);
+		$operador_perfil->permissions()->attach($comorbidade_export);
+
 
 
 		// leitura é um tipo de operador que só pode ler
@@ -162,6 +259,18 @@ class acl extends Seeder
 		# unidades
 		$leitor_perfil->permissions()->attach($unidade_index);
 		$leitor_perfil->permissions()->attach($unidade_show);
+		# sintoma
+		$leitor_perfil->permissions()->attach($sintoma_index);
+		$leitor_perfil->permissions()->attach($sintoma_show);
+		# sintoma
+		$leitor_perfil->permissions()->attach($sintoma_cadastro_index);
+		$leitor_perfil->permissions()->attach($sintoma_cadastro_show);
+		# doencas base
+		$leitor_perfil->permissions()->attach($doencasbase_index);
+		$leitor_perfil->permissions()->attach($doencasbase_show);
+		# comorbidades
+		$leitor_perfil->permissions()->attach($comorbidade_index);
+		$leitor_perfil->permissions()->attach($comorbidade_show);
 
 
     }

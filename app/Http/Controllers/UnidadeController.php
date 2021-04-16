@@ -139,9 +139,7 @@ class UnidadeController extends Controller
 
         $unidade = Unidade::findOrFail($id);
 
-        $unidadeprofissionais = UnidadeProfissional::where('unidade_id', '=', $id)->orderBy('id', 'desc')->get();
-
-        return view('unidades.show', compact('unidade', 'unidadeprofissionais'));
+        return view('unidades.show', compact('unidade'));
     }
 
     /**
@@ -161,9 +159,8 @@ class UnidadeController extends Controller
         // consulta a tabela dos distritos
         $distritos = Distrito::orderBy('nome', 'asc')->get();
 
-        $unidadeprofissionais = UnidadeProfissional::where('unidade_id', '=', $id)->orderBy('id', 'desc')->get();
 
-        return view('unidades.edit', compact('unidade', 'distritos', 'unidadeprofissionais'));
+        return view('unidades.edit', compact('unidade', 'distritos'));
     }
 
     /**
@@ -178,7 +175,6 @@ class UnidadeController extends Controller
         $this->validate($request, [
           'descricao' => 'required',
           'distrito_id' => 'required',
-          'porte' => 'required',
         ],
         ['distrito_id.required' => 'Selecione na lista o distrito']);
 
