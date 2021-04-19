@@ -79,3 +79,8 @@ Route::resource('/doencasbases', 'DoencasBaseController');
 Route::get('/comorbidades/export/csv', 'ComorbidadeController@exportcsv')->name('comorbidades.export.csv');
 Route::get('/comorbidades/export/pdf', 'ComorbidadeController@exportpdf')->name('comorbidades.export.pdf');
 Route::resource('/comorbidades', 'ComorbidadeController');
+
+/* Pacientes */
+Route::get('/pacientes/export/csv', 'PacienteController@exportcsv')->name('pacientes.export.csv');
+Route::get('/pacientes/export/pdf', 'PacienteController@exportpdf')->name('pacientes.export.pdf');
+Route::resource('/pacientes', 'PacienteController');

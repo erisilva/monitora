@@ -35,6 +35,7 @@ class CreatePacientesTable extends Migration
             // contatos
             $table->string('cel1'); // ogrigatorio
             $table->string('cel2')->nullable();
+            $table->string('email')->nullable();
 
             //unidade de origem
             $table->bigInteger('unidade_id')->unsigned();
@@ -50,6 +51,8 @@ class CreatePacientesTable extends Migration
 
             // operador que fez o cadastro
             $table->bigInteger('user_id')->unsigned();
+
+            $table->text('notas')->nullable();
 
             $table->softDeletes();
             $table->timestamps();
