@@ -1,10 +1,10 @@
-<p align="center"><img src="http://www.contagem.mg.gov.br/novoportal/wp-content/themes/pmc/images/logo-prefeitura-contagem.png"></p>
+<p align="center"><img src="http://contagem.mg.gov.br/novoportal/images/brasao_provisorio.png"></p>
 
 ## Sobre
 
-Sistema de ACL. Uso como base para criar meus projetos. 
+Sistema de monitoramento de pacientes com Covid
 
-O ProtRH foi constuído com a framework [Laravel](https://laravel.com/), na versão 7.x e usa como front-end [Bootstrap 4.5](https://getbootstrap.com/).
+Esse sistema foi constuído com a framework [Laravel](https://laravel.com/), na versão 7.x e usa como front-end [Bootstrap 4.5](https://getbootstrap.com/).
 
 Faz uso também das seguintes bibliotecas:
 
@@ -14,7 +14,7 @@ Faz uso também das seguintes bibliotecas:
 
 ## Requisitos
 
-Os requisitos para executar esse sistema pode ser encontrado na [documentação oficial do laravel](https://laravel.com/docs/6.x):
+Os requisitos para executar esse sistema pode ser encontrado na [documentação oficial do laravel](https://laravel.com/docs/7.x):
 
 - PHP >= 7.2.5
 - BCMath PHP Extension

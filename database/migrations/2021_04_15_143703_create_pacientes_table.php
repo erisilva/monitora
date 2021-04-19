@@ -23,7 +23,6 @@ class CreatePacientesTable extends Migration
             $table->string('cns')->nullable();
             $table->integer('idade');
 
-
             // endereço
             $table->string('cep');
             $table->string('logradouro');
