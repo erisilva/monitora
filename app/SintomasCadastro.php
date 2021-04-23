@@ -15,4 +15,3 @@ class SintomasCadastro extends Model
         return $this->belongsToMany('App\Paciente');
     }
 }
-}

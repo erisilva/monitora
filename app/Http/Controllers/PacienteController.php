@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Paciente;
 use App\DoencasBase;
+use App\SintomasCadastro;
 use App\Comorbidade;
 use App\Perpage;
 
@@ -47,7 +48,6 @@ class PacienteController extends Controller
      */
     public function index()
     {
-
         $pacientes = new Paciente;
 
         // ordena
@@ -149,6 +149,13 @@ class PacienteController extends Controller
             }
         }
 
+        //salva os sintomas iniciais
+        if(isset($paciente['sintomasiniciais']) && count($paciente['sintomasiniciais'])){
+            foreach ($paciente['sintomasiniciais'] as $key => $value) {
+               $novoPaciente->sintomasCadastros()->attach($value);
+            }
+        }
+
         Session::flash('create_paciente', 'paciente cadastrado com sucesso!');
 
         return redirect(route('pacientes.index'));
@@ -162,7 +169,9 @@ class PacienteController extends Controller
      */
     public function show($id)
     {
-        //
+        $paciente = Paciente::findOrFail($id);
+
+        return view('pacientes.show', compact('paciente'));
     }
 
     /**

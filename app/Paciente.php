@@ -13,7 +13,7 @@ class Paciente extends Model
         'nome', 'nomeMae', 'nascimento', 'cns', 'idade', 'cep', 'logradouro', 'bairro', 'numero', 'complemento', 'cidade', 'uf', 'cel1', 'cel2', 'email', 'unidade_id', 'ultimoMonitoramento', 'tomouVacina',  'inicioSintomas', 'monitorando', 'user_id', 'notas',
     ];
 
-    protected $dates = ['nascimento', 'ultimoMonitoramento', 'created_at', 'deleted_at'];
+    protected $dates = ['nascimento', 'ultimoMonitoramento', 'inicioSintomas', 'created_at', 'deleted_at'];
 
     public function comorbidades()
     {
@@ -22,6 +22,16 @@ class Paciente extends Model
 
     public function sintomasCadastros()
     {
-        return $this->belongsToMany('App\SintomaCadastro');
+        return $this->belongsToMany('App\SintomasCadastro');
+    }
+
+    public function unidade()
+    {
+        return $this->belongsTo('App\Unidade');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 }

@@ -49,6 +49,11 @@
         <thead>
             <tr>
                 <th scope="col">Nome</th>
+                <th scope="col">Nome da Mãe</th>
+                <th scope="col">Nascimento</th>
+                <th scope="col">Idade</th>
+                <th scope="col">Unidade</th>
+                <th scope="col">Distrito</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -56,6 +61,11 @@
             @foreach($pacientes as $paciente)
             <tr>
                 <td>{{$paciente->nome}}</td>
+                <td>{{$paciente->nomeMae}}</td>
+                <td>{{$paciente->nascimento->format('d/m/Y')}}</td>
+                <td>{{$paciente->idade}}</td>
+                <td>{{$paciente->unidade->descricao}}</td>
+                <td>{{$paciente->unidade->distrito->nome}}</td>
                 <td>
                   <div class="btn-group" role="group">
                     <a href="{{route('pacientes.edit', $paciente->id)}}" class="btn btn-primary btn-sm" role="button"><i class="fas fa-edit"></i></a>

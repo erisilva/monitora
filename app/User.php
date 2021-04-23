@@ -79,5 +79,11 @@ class User extends Authenticatable
         }
         return (boolean) $this->roles()->find($role->id);
 
-    }    
+    }
+
+
+    public function pacientes()
+    {
+        return $this->belongsToMany('App\Paciente');
+    }   
 }
