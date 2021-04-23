@@ -9,4 +9,10 @@ class SintomasCadastro extends Model
     protected $fillable = [
         'descricao'
     ];
+
+        public function pacientes()
+    {
+        return $this->belongsToMany('App\Paciente');
+    }
+}
 }

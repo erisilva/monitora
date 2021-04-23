@@ -14,4 +14,14 @@ class Paciente extends Model
     ];
 
     protected $dates = ['nascimento', 'ultimoMonitoramento', 'created_at', 'deleted_at'];
+
+    public function comorbidades()
+    {
+        return $this->belongsToMany('App\Comorbidade');
+    }
+
+    public function sintomasCadastros()
+    {
+        return $this->belongsToMany('App\SintomaCadastro');
+    }
 }

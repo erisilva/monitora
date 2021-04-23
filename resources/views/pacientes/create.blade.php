@@ -49,11 +49,11 @@
 
 
       <div class="form-group col-md-5">
-        <label for="nome">Nome da Mãe<strong  class="text-danger">(*)</strong></label>
-        <input type="text" class="form-control{{ $errors->has('nome') ? ' is-invalid' : '' }}" name="nome" value="{{ old('nome') ?? '' }}">
-        @if ($errors->has('nome'))
+        <label for="nomeMae">Nome da Mãe<strong  class="text-danger">(*)</strong></label>
+        <input type="text" class="form-control{{ $errors->has('nomeMae') ? ' is-invalid' : '' }}" name="nomeMae" value="{{ old('nomeMae') ?? '' }}">
+        @if ($errors->has('nomeMae'))
         <div class="invalid-feedback">
-        {{ $errors->first('nome') }}
+        {{ $errors->first('nomeMae') }}
         </div>
         @endif
       </div>
@@ -209,7 +209,21 @@
         </div>
         @endif
       </div>
-      <div class="form-group col-md-5">
+      <div class="form-group col-md-2">
+        <label for="tomouVacina">Tomou Vacina?<strong  class="text-danger">(*)</strong></label>
+        <select class="form-control {{ $errors->has('tomouVacina') ? ' is-invalid' : '' }}" name="tomouVacina" id="tomouVacina">
+          <option value="">Selecione</option>
+          <option value="nao" {{ old("tomouVacina") == "nao" ? "selected":"" }}>Não</option>
+          <option value="sim, 1 dose"  {{ old("tomouVacina") == "sim, 1 dose" ? "selected":"" }}>Sim, 1 dose</option>      
+          <option value="sim, 2 doses"  {{ old("tomouVacina") == "sim, 2 doses" ? "selected":"" }}>Sim, 2 doses</option>
+        </select>
+        @if ($errors->has('tomouVacina'))
+        <div class="invalid-feedback">
+        {{ $errors->first('tomouVacina') }}
+        </div>
+        @endif    
+      </div>
+      <div class="form-group col-md-4">
         <label for="comorbidades">Comorbidades <strong  class="text-warning">(opcional)</strong></label>
         <select id="comorbidades" name="comorbidades[]" multiple="multiple">
             @foreach($comorbidades as $comorbidade)
@@ -217,7 +231,7 @@
             @endforeach
         </select>
       </div>
-      <div class="form-group col-md-5">
+      <div class="form-group col-md-4">
         <label for="sintomasiniciais">Sintomas iniciais <strong  class="text-warning">(opcional)</strong></label>
         <select id="sintomasiniciais" name="sintomasiniciais[]" multiple="multiple">
             @foreach($doencas as $doenca)
@@ -260,7 +274,7 @@
           language: "pt-BR",
           autoclose: true,
           todayHighlight: true,
-          forceParse: false
+          forceParse: true
       });
 
       $('#inicioSintomas').datepicker({
@@ -270,7 +284,7 @@
           language: "pt-BR",
           autoclose: true,
           todayHighlight: true,
-          forceParse: false
+          forceParse: true
       });
 
       $.fn.multiselect.Constructor.prototype.defaults.selectAllText = " Selecionar Todos";

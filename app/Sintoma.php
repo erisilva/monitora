@@ -9,4 +9,7 @@ class Sintoma extends Model
     protected $fillable = [
         'descricao'
     ];
+
+
+
 }
