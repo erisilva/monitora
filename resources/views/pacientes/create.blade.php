@@ -187,12 +187,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="email">E-mail <strong  class="text-warning">(opcional)</strong></label>
-        <input type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') ?? '' }}">
-        @if ($errors->has('email'))
-        <div class="invalid-feedback">
-        {{ $errors->first('email') }}
-        </div>
-        @endif
+        <input type="text" class="form-control" name="email" value="{{ old('email') ?? '' }}">
       </div>
     </div>
 
@@ -224,18 +219,18 @@
         @endif    
       </div>
       <div class="form-group col-md-4">
-        <label for="comorbidades">Comorbidades <strong  class="text-warning">(opcional)</strong></label>
-        <select id="comorbidades" name="comorbidades[]" multiple="multiple">
-            @foreach($comorbidades as $comorbidade)
-            <option value="{{$comorbidade->id}}">{{$comorbidade->descricao}}</option>
+        <label for="sintomasiniciais">Sintomas iniciais <strong  class="text-warning">(opcional)</strong></label>
+        <select id="sintomasiniciais" name="sintomasiniciais[]" multiple="multiple">
+            @foreach($sintomas as $sintoma)
+            <option value="{{$sintoma->id}}">{{$sintoma->descricao}}</option>
             @endforeach
         </select>
       </div>
       <div class="form-group col-md-4">
-        <label for="sintomasiniciais">Sintomas iniciais <strong  class="text-warning">(opcional)</strong></label>
-        <select id="sintomasiniciais" name="sintomasiniciais[]" multiple="multiple">
-            @foreach($doencas as $doenca)
-            <option value="{{$doenca->id}}">{{$doenca->descricao}}</option>
+        <label for="comorbidades">Comorbidades <strong  class="text-warning">(opcional)</strong></label>
+        <select id="comorbidades" name="comorbidades[]" multiple="multiple">
+            @foreach($comorbidades as $comorbidade)
+            <option value="{{$comorbidade->id}}">{{$comorbidade->descricao}}</option>
             @endforeach
         </select>
       </div>
@@ -250,7 +245,7 @@
     </div>
 
 
-    <button type="submit" class="btn btn-primary"><i class="fas fa-plus-square"></i> Incluir Sintoma</button>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-plus-square"></i> Incluir Paciente</button>
   </form>
   <div class="float-right">
     <a href="{{ route('pacientes.index') }}" class="btn btn-secondary btn-sm" role="button"><i class="fas fa-long-arrow-alt-left"></i> Voltar</i></a>

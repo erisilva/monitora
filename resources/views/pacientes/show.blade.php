@@ -153,7 +153,10 @@
         </div>       
     </div>
 
-
+    <div class="form-group">
+      <label for="notas">Notas/Observações</label>
+      <textarea class="form-control" name="notas" id="notas" rows="3" readonly>{{ $paciente->notas }}</textarea>
+    </div>
 
 
     <div class="form-row">

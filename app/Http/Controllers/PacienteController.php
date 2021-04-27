@@ -78,9 +78,9 @@ class PacienteController extends Controller
     {
         $comorbidades = Comorbidade::orderBy('descricao', 'asc')->get();
 
-        $doencas = DoencasBase::orderBy('descricao', 'asc')->get();
+        $sintomas = SintomasCadastro::orderBy('descricao', 'asc')->get();
 
-        return view('pacientes.create', compact('comorbidades', 'doencas'));
+        return view('pacientes.create', compact('comorbidades', 'sintomas'));
     }
 
     /**
@@ -95,7 +95,7 @@ class PacienteController extends Controller
         $this->validate($request, [
             'nome' => 'required',
             'nomeMae' => 'required',
-            'nascimento' => 'required',
+            'nascimento' => 'required|date_format:d/m/Y',
             'unidade_id' => 'required',
             'tomouVacina' => 'required',
             'cel1' => 'required',
@@ -115,7 +115,6 @@ class PacienteController extends Controller
             'unidade_id.required' => 'Preencha o campo de unidade',
             'tomouVacina.required' => 'Escolha uma opção',
             'inicioSintomas.required' => 'O início dos sintomas deve ser preenchido',
-
         ]);
 
 
@@ -182,7 +181,13 @@ class PacienteController extends Controller
      */
     public function edit($id)
     {
-        //
+        $paciente = Paciente::findOrFail($id);
+
+        $comorbidades = Comorbidade::orderBy('descricao', 'asc')->get();
+
+        $sintomas = SintomasCadastro::orderBy('descricao', 'asc')->get();
+
+        return view('pacientes.edit', compact('paciente', 'comorbidades', 'sintomas'));
     }
 
     /**
@@ -194,7 +199,17 @@ class PacienteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+          'nome' => 'required',
+        ]);
+
+        $paciente = Paciente::findOrFail($id);
+            
+        $paciente->update($request->all());
+        
+        Session::flash('edited_paciente', 'Paciente alterado com sucesso!');
+
+        return redirect(route('pacientes.edit', $id));
     }
 
     /**
@@ -205,6 +220,6 @@ class PacienteController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 }
