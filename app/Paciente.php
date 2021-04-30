@@ -25,6 +25,11 @@ class Paciente extends Model
         return $this->belongsToMany('App\SintomasCadastro');
     }
 
+    public function doencasBases()
+    {
+        return $this->belongsToMany('App\DoencasBase');
+    }
+
     public function unidade()
     {
         return $this->belongsTo('App\Unidade');

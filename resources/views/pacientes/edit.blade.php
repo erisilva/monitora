@@ -48,17 +48,6 @@
     @method('PUT')
 
     <div class="form-row">
-      <div class="form-group col-md-6">
-
-      </div>
-      <div class="form-group col-md-6">
-
-      </div>
-    </div>
-
-
-
-    <div class="form-row">
       <div class="form-group col-md-4">
         <label for="nome">Nome<strong  class="text-danger">(*)</strong></label>
         <input type="text" class="form-control{{ $errors->has('nome') ? ' is-invalid' : '' }}" name="nome" value="{{ old('nome') ?? $paciente->nome }}">
@@ -240,21 +229,98 @@
         <label for="sintomasiniciais">Sintomas iniciais <strong  class="text-warning">(opcional)</strong></label>
         <select id="sintomasiniciais" name="sintomasiniciais[]" multiple="multiple">
             @foreach($sintomas as $sintoma)
-            <option value="{{$sintoma->id}}">{{$sintoma->descricao}}</option>
+            @php
+            $selected = '';
+            if(old('sintomasiniciais') ?? false){
+              foreach (old('sintomasiniciais') as $key => $id) {
+                if($id == $sintoma->id){
+                  $selected = "selected";
+                }
+              }  
+            } else {
+              foreach ($paciente->sintomasCadastros as $key => $sintomasList) {
+                if($sintomasList->id == $sintoma->id){
+                  $selected = "selected";
+                }
+              }
+            }
+            @endphp
+            <option value="{{$sintoma->id}}" {{ $selected }}>{{$sintoma->descricao}}</option>
             @endforeach
         </select>
       </div>
       <div class="form-group col-md-4">
-
+        <label for="comorbidades">Comorbidades <strong  class="text-warning">(opcional)</strong></label>
+        <select id="comorbidades" name="comorbidades[]" multiple="multiple">
+            @foreach($comorbidades as $comorbidade)
+            @php
+            $selected = '';
+            if(old('comorbidades') ?? false){
+              foreach (old('comorbidades') as $key => $id) {
+                if($id == $comorbidade->id){
+                  $selected = "selected";
+                }
+              }  
+            } else {
+              foreach ($paciente->comorbidades as $key => $comorbidadesList) {
+                if($comorbidadesList->id == $comorbidade->id){
+                  $selected = "selected";
+                }
+              }
+            }
+            @endphp
+            <option value="{{$comorbidade->id}}"  {{ $selected }}>{{$comorbidade->descricao}}</option>
+            @endforeach
+        </select>
       </div>
     </div>
 
 
+    <div class="form-group">
+      <label for="doencas">Doenças de Base <strong  class="text-warning">(opcional)</strong></label>
+      <select id="doencas" name="doencas[]" multiple="multiple">
+          @foreach($doencas as $doenca)
+          @php
+            $selected = '';
+            if(old('doencas') ?? false){
+              foreach (old('doencas') as $key => $id) {
+                if($id == $doenca->id){
+                  $selected = "selected";
+                }
+              }  
+            } else {
+              foreach ($paciente->doencasBases as $key => $doencasbaseList) {
+                if($doencasbaseList->id == $doenca->id){
+                  $selected = "selected";
+                }
+              }
+            }
+            @endphp
+          <option value="{{$doenca->id}}"  {{ $selected }}>{{$doenca->descricao}}</option>
+          @endforeach
+      </select>      
+    </div>
+
+    <div class="form-group">
+      <label for="notas">Notas/Observações <strong  class="text-warning">(opcional)</strong></label>
+      <textarea class="form-control" name="notas" id="notas" rows="3">{{ old('notas') ?? $paciente->notas }}</textarea>
+    </div>
 
 
-
-
-
+    <div class="form-row">
+      <div class="form-group col-md-3">
+        <label for="data_do_cadastro">Data do cadastro</label>
+        <input type="text" class="form-control" name="data_do_cadastro" value="{{ $paciente->created_at->format('d/m/Y') }}" readonly>
+      </div> 
+      <div class="form-group col-md-3">
+        <label for="hora_do_cadastro">Hora do cadastro</label>
+        <input type="text" class="form-control" name="hora_do_cadastro" value="{{ $paciente->created_at->format('H:i') }}" readonly>
+      </div> 
+      <div class="form-group col-md-6">
+        <label for="funcionario_responsavel">Funcionário Responsável</label>
+        <input type="text" class="form-control" name="funcionario_responsavel" value="{{ $paciente->user->name }}" readonly>
+      </div> 
+    </div>
 
     <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i> Alterar Dados do Paciente</button>
   </form>
@@ -307,6 +373,11 @@
               });
 
       $('#sintomasiniciais').multiselect({
+                includeSelectAllOption: true,
+                buttonWidth: '100%'
+              });
+
+      $('#doencas').multiselect({
                 includeSelectAllOption: true,
                 buttonWidth: '100%'
               });

@@ -69,7 +69,7 @@
                 <td>
                   <div class="btn-group" role="group">
                     <a href="{{route('pacientes.edit', $paciente->id)}}" class="btn btn-primary btn-sm" role="button"><i class="fas fa-edit"></i></a>
-                    <a href="{{route('pacientes.show', $paciente->id)}}" class="btn btn-primary btn-sm" role="button"><i class="fas fa-trash-alt"></i></a>
+                    <a href="{{route('pacientes.show', $paciente->id)}}" class="btn btn-primary btn-sm" role="button"><i class="fas fa-print"></i></a>
                   </div>
                 </td>
             </tr>    

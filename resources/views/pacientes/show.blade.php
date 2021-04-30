@@ -148,7 +148,9 @@
             Doenças de Base
           </div>
           <div class="card-body">
-            a ser implementado aqui
+            @foreach($paciente->doencasBases as $doencas)
+              <span class="lead"><span class="badge badge-light">{{ $doencas->descricao }}</span></span>
+            @endforeach
           </div>
         </div>       
     </div>

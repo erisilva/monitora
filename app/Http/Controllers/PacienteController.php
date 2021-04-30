@@ -105,7 +105,7 @@ class PacienteController extends Controller
             'bairro' => 'required',
             'cidade' => 'required',
             'uf' => 'required',
-            'inicioSintomas' => 'required',
+            'inicioSintomas' => 'required|date_format:d/m/Y',
         ],
         [
             'nome.required' => 'O nome do paciente é obrigatório',
@@ -187,7 +187,9 @@ class PacienteController extends Controller
 
         $sintomas = SintomasCadastro::orderBy('descricao', 'asc')->get();
 
-        return view('pacientes.edit', compact('paciente', 'comorbidades', 'sintomas'));
+        $doencas = DoencasBase::orderBy('descricao', 'asc')->get();
+
+        return view('pacientes.edit', compact('paciente', 'comorbidades', 'sintomas', 'doencas'));
     }
 
     /**
@@ -200,12 +202,100 @@ class PacienteController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-          'nome' => 'required',
+            'nome' => 'required',
+            'nomeMae' => 'required',
+            'nascimento' => 'required|date_format:d/m/Y',
+            'unidade_id' => 'required',
+            'tomouVacina' => 'required',
+            'cel1' => 'required',
+            'cep' => 'required',
+            'logradouro' => 'required',
+            'numero' => 'required',
+            'bairro' => 'required',
+            'cidade' => 'required',
+            'uf' => 'required',
+            'inicioSintomas' => 'required|date_format:d/m/Y',
+        ],
+        [
+            'nome.required' => 'O nome do paciente é obrigatório',
+            'nomeMae.required' => 'O nome da mãe do paciente é obrigatório',
+            'nascimento.required' => 'A data de nascimento é obrigatória',
+            'cel1.required' => 'É obrigatório digitar um número de celular para contato',
+            'unidade_id.required' => 'Preencha o campo de unidade',
+            'tomouVacina.required' => 'Escolha uma opção',
+            'inicioSintomas.required' => 'O início dos sintomas deve ser preenchido',
         ]);
 
         $paciente = Paciente::findOrFail($id);
+
+        $paciente_input = $request->all();
+
+        $user = Auth::user();
+
+        // calcula a idade
+        $paciente_input['idade'] = Carbon::createFromFormat('d/m/Y', $paciente_input['nascimento'])->age;
+
+       //salva o usuario que fez o cadastro
+        $paciente_input['user_id'] = $user->id;
+
+        // coloca a situação do monitoramento como não monitorado
+        $paciente_input['monitorando'] = 's';
+
+        // ajuste de data de nascimento
+        $dataFormatadaMysql = Carbon::createFromFormat('d/m/Y', request('nascimento'))->format('Y-m-d');
+        $paciente_input['nascimento'] =  $dataFormatadaMysql;
+
+        // ajuste de data de inicio dos Sintomas
+        $dataFormatadaMysql = Carbon::createFromFormat('d/m/Y', request('inicioSintomas'))->format('Y-m-d');
+        $paciente_input['inicioSintomas'] =  $dataFormatadaMysql;
             
-        $paciente->update($request->all());
+        // remove todos os comorbidades
+        $comorbidades = $paciente->comorbidades;
+        if(count($comorbidades)){
+            foreach ($comorbidades as $key => $value) {
+               $paciente->comorbidades()->detach($value->id);
+            }
+        }
+
+        // vincula as comorbidades
+        if(isset($paciente_input['comorbidades']) && count($paciente_input['comorbidades'])){
+            foreach ($paciente_input['comorbidades'] as $key => $value) {
+               $paciente->comorbidades()->attach($value);
+            }
+        }
+
+        // remove todos os sintomas do cadastro (sintomas iniciais)
+        $sintomasCadastros = $paciente->sintomasCadastros;
+        if(count($sintomasCadastros)){
+            foreach ($sintomasCadastros as $key => $value) {
+               $paciente->sintomasCadastros()->detach($value->id);
+            }
+        }
+
+        // vincula as sintomas do cadastro (sintomas iniciais)
+        if(isset($paciente_input['sintomasiniciais']) && count($paciente_input['sintomasiniciais'])){
+            foreach ($paciente_input['sintomasiniciais'] as $key => $value) {
+               $paciente->sintomasCadastros()->attach($value);
+            }
+        }
+
+        // remove todos os sintomas do cadastro (sintomas iniciais)
+        $doencasBases = $paciente->doencasBases;
+        if(count($doencasBases)){
+            foreach ($doencasBases as $key => $value) {
+               $paciente->doencasBases()->detach($value->id);
+            }
+        }
+
+        // vincula as sintomas do cadastro (sintomas iniciais)
+        if(isset($paciente_input['doencas']) && count($paciente_input['doencas'])){
+            foreach ($paciente_input['doencas'] as $key => $value) {
+               $paciente->doencasBases()->attach($value);
+            }
+        }
+
+
+        $paciente->update($paciente_input);
         
         Session::flash('edited_paciente', 'Paciente alterado com sucesso!');
 

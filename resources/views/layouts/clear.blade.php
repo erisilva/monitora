@@ -17,7 +17,7 @@
     <script src="https://kit.fontawesome.com/ba9a47adcd.js" crossorigin="anonymous"></script>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.united.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.cerulean.css') }}">
 
     <!-- Custom css, necessary for typehead -->
     @yield('css-header')
