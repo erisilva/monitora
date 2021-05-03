@@ -9,15 +9,7 @@
   </nav>
   @if(Session::has('deleted_paciente'))
   <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <strong>Info!</strong>  {{ session('deleted_paciente') }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  @endif
-  @if(Session::has('create_paciente'))
-  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <strong>Info!</strong>  {{ session('create_paciente') }}
+    <h2><span><i class="fas fa-exclamation-circle"></i></span> {{ session('deleted_paciente') }}</h2>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -25,7 +17,7 @@
   @endif
   @if(Session::has('restore_paciente'))
   <div class="alert alert-success alert-dismissible fade show" role="alert">
-    <strong>Info!</strong>  {{ session('restore_paciente') }}
+    <h2><span><i class="fas fa-exclamation-circle"></i></span> {{ session('restore_paciente') }}</h2>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -83,7 +75,7 @@
   </div>
   <!-- Janela de filtragem da consulta -->
   <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="JanelaFiltro" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fas fa-filter"></i> Filtro</h5>
@@ -93,6 +85,53 @@
         </div>
         <div class="modal-body">
           <!-- Filtragem dos dados -->
+
+          <form method="GET" action="{{ route('pacientes.index') }}">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="nome">Nome do Paciente</label>
+                <input type="text" class="form-control" id="nome" name="nome" value="{{request()->input('nome')}}">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="nomeMae">Nome da Mãe</label>
+                <input type="text" class="form-control" id="nomeMae" name="nomeMae" value="{{request()->input('nomeMae')}}">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="unidade">Unidade</label>
+                <input type="text" class="form-control" id="unidade" name="unidade" value="{{request()->input('unidade')}}">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="distrito_id">Distritos</label>
+                <select class="form-control" name="distrito_id" id="distrito_id">
+                  <option value="">Mostrar todos</option>
+                  @foreach($distritos as $distrito)
+                  <option value="{{$distrito->id}}" {{ ($distrito->id == request()->input('distrito_id')) ? ' selected' : '' }} >{{$distrito->nome}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label for="idadeMin">Idade (Mínima)</label>
+                <input type="number" class="form-control" id="idadeMin" name="idadeMin" value="{{request()->input('idadeMin')}}">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="idadeMax">Idade (Máxima)</label>
+                <input type="number" class="form-control" id="idadeMax" name="idadeMax" value="{{request()->input('idadeMax')}}">
+              </div>
+              <div class="form-group col-md-6">
+
+              </div>
+            </div>
+              
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Pesquisar</button>
+              <a href="{{ route('pacientes.index') }}" class="btn btn-primary btn-sm" role="button">Limpar</a>
+          </form>
+          <br>    
           <!-- Seleção de número de resultados por página -->
           <div class="form-group">
             <select class="form-control" name="perpage" id="perpage">

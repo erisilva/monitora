@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Paciente;
+use App\Distrito;
 use App\DoencasBase;
 use App\SintomasCadastro;
 use App\Comorbidade;
@@ -20,6 +21,10 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon; // tratamento de datas
 
 use Auth;
+
+use Illuminate\Support\Facades\Redirect; // para poder usar o redirect
+
+use Illuminate\Database\Eloquent\Builder; // para poder usar o whereHas nos filtros
 
 class PacienteController extends Controller
 {
@@ -50,6 +55,49 @@ class PacienteController extends Controller
     {
         $pacientes = new Paciente;
 
+        // filtros
+        if (request()->has('nome')){
+            $pacientes = $pacientes->where('nome', 'like', '%' . request('nome') . '%');
+        }
+
+        if (request()->has('nomeMae')){
+            $pacientes = $pacientes->where('nomeMae', 'like', '%' . request('nomeMae') . '%');
+        }
+
+        if (request()->has('unidade')){
+            $pacientes = $pacientes->whereHas('unidade', function ($query) {
+                                                $query->where('descricao', 'like', '%' . request('unidade') . '%');
+                                            });
+        }
+
+        if (request()->has('distrito_id')){
+            if (request('distrito_id') != ""){
+                $pacientes = $pacientes->whereHas('unidade', function ($query) {
+                                                    $query->where('distrito_id', '=', request('distrito_id'));
+                                                });                
+            }
+        }
+
+        if (request()->has('idadeMin')){
+            if (request('idadeMin') != ""){
+                $pacientes = $pacientes->where('idade', '>=', request('idadeMin'));
+            }
+        } 
+
+        if (request()->has('idadeMax')){
+            if (request('idadeMax') != ""){
+                $pacientes = $pacientes->where('idade', '<=', request('idadeMax'));
+            }
+        }
+
+        // if (request()->has('idadeMin')){
+        //     $pacientes = $pacientes->where('idade', '>=', request('idadeMin'));
+        // }
+
+        // if (request()->has('idadeMax')){
+        //     $pacientes = $pacientes->where('idade', '<=', request('idadeMax'));
+        // }
+
         // ordena
         $pacientes = $pacientes->orderBy('nome', 'asc');
 
@@ -64,9 +112,19 @@ class PacienteController extends Controller
         $perpages = Perpage::orderBy('valor')->get();
 
         // paginação
-        $pacientes = $pacientes->paginate(session('perPage', '5'));
+        $pacientes = $pacientes->paginate(session('perPage', '5'))->appends([          
+            'nome' => request('nome'),
+            'nomeMae' => request('nomeMae'),
+            'unidade' => request('unidade'),
+            'distrito_id' => request('distrito_id'),
+            'idadeMin' => request('idadeMin'),
+            'idadeMax' => request('idadeMax'),    
+            ]);
 
-        return view('pacientes.index', compact('pacientes', 'perpages'));
+        // tabelas auxiliares usadas pelo filtro
+        $distritos = Distrito::orderBy('nome', 'asc')->get();
+
+        return view('pacientes.index', compact('pacientes', 'perpages', 'distritos'));
     }
 
     /**
@@ -155,9 +213,11 @@ class PacienteController extends Controller
             }
         }
 
-        Session::flash('create_paciente', 'paciente cadastrado com sucesso!');
+        Session::flash('create_paciente', 'Paciente foi cadastrado com sucesso!');
 
-        return redirect(route('pacientes.index'));
+        //return redirect(route('pacientes.index'));
+
+        return Redirect::route('pacientes.edit', $novoPaciente->id);
     }
 
     /**
@@ -297,7 +357,7 @@ class PacienteController extends Controller
 
         $paciente->update($paciente_input);
         
-        Session::flash('edited_paciente', 'Paciente alterado com sucesso!');
+        Session::flash('edited_paciente', 'Cadastro do paciente foi alterado com sucesso!');
 
         return redirect(route('pacientes.edit', $id));
     }
@@ -310,6 +370,10 @@ class PacienteController extends Controller
      */
     public function destroy($id)
     {
+        Paciente::findOrFail($id)->delete();
 
+        Session::flash('deleted_paciente', 'Paciente enviado para lixeira!');
+
+        return redirect(route('pacientes.index'));
     }
 }

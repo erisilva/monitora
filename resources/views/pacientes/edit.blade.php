@@ -35,9 +35,17 @@
   </nav>
 </div>
 <div class="container">
-  @if(Session::has('edited_sintoma'))
+  @if(Session::has('edited_paciente'))
   <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <strong>Info!</strong>  {{ session('edited_sintoma') }}
+    <h2><span><i class="fas fa-exclamation-circle"></i></span> {{ session('edited_paciente') }}</h2>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  @endif
+  @if(Session::has('create_paciente'))
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <h2><span><i class="fas fa-exclamation-circle"></i></span> {{ session('create_paciente') }}</h2>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -276,7 +284,8 @@
     </div>
 
 
-    <div class="form-group">
+    <div class="form-row">
+      <div class="form-group col-md-8">
       <label for="doencas">Doenças de Base <strong  class="text-warning">(opcional)</strong></label>
       <select id="doencas" name="doencas[]" multiple="multiple">
           @foreach($doencas as $doenca)
@@ -298,8 +307,16 @@
             @endphp
           <option value="{{$doenca->id}}"  {{ $selected }}>{{$doenca->descricao}}</option>
           @endforeach
-      </select>      
-    </div>
+      </select> 
+      </div>  
+      <div class="form-group col-md-4">
+        <label for="tomouVacina">Situação</label>
+        <p class="situacao">
+          Monitorado/Alta/Não (implementar)
+        </p>
+      </div>
+    </div>  
+
 
     <div class="form-group">
       <label for="notas">Notas/Observações <strong  class="text-warning">(opcional)</strong></label>
@@ -325,6 +342,13 @@
     <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i> Alterar Dados do Paciente</button>
   </form>
 </div>
+
+<br>
+<div class="container bg-warning text-dark">
+  <p class="text-center"><strong>Monitoramento</strong></p>
+</div>
+
+
 <div class="container">
   <div class="float-right">
     <a href="{{ route('pacientes.index') }}" class="btn btn-secondary btn-sm" role="button"><i class="fas fa-long-arrow-alt-left"></i> Voltar</i></a>
