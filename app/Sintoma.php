@@ -10,6 +10,9 @@ class Sintoma extends Model
         'descricao'
     ];
 
-
+    public function monitoramentos()
+    {
+        return $this->belongsToMany('App\Monitoramento');
+    }
 
 }

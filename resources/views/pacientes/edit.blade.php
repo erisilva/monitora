@@ -51,6 +51,14 @@
     </button>
   </div>
   @endif
+  @if(Session::has('create_monitoramento'))
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <h2><span><i class="fas fa-exclamation-circle"></i></span> {{ session('create_monitoramento') }}</h2>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  @endif
   <form method="POST" action="{{ route('pacientes.update', $paciente->id) }}">
     @csrf
     @method('PUT')
@@ -96,8 +104,6 @@
         <label for="cns">CNS <strong  class="text-warning">(Opcional)</strong></label>
         <input type="text" class="form-control" name="cns" value="{{ old('cns') ?? $paciente->cns }}">
       </div>
-
-
 
       <div class="form-group col-md-5">
         <label for="unidade_descricao">Unidade<strong  class="text-danger">(*)</strong></label>
@@ -207,9 +213,6 @@
     </div>
 
 
-
-
-
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="inicioSintomas">Data Início Sintomas<strong  class="text-danger">(*)</strong></label>
@@ -312,7 +315,20 @@
       <div class="form-group col-md-4">
         <label for="tomouVacina">Situação</label>
         <p class="situacao">
-          Monitorado/Alta/Não (implementar)
+          @php
+            if ($paciente->monitorando == 'n') {
+              $situacao = 'Não Monitorado';
+            }
+
+            if ($paciente->monitorando == 's') {
+              $situacao = 'Monitorado ' . $paciente->ultimoMonitoramento->diffForHumans();
+            }
+
+            if ($paciente->monitorando == 'f') {
+              $situacao = 'Alta em ' . $paciente->ultimoMonitoramento->format('d/m/Y');
+            }
+          @endphp
+          <strong>{{ $situacao }}</strong>
         </p>
       </div>
     </div>  
@@ -345,10 +361,227 @@
 
 <br>
 <div class="container bg-warning text-dark">
-  <p class="text-center"><strong>Monitoramento</strong></p>
+  <p class="text-center"><strong>Monitorar Paciente</strong></p>
+</div>
+<div class="container">
+
+  <form method="POST" action="{{ route('monitoramentos.store') }}">
+      @csrf
+      <input type="hidden" id="paciente_id" name="paciente_id" value="{{ $paciente->id }}">
+      <div class="form-row">
+        <div class="form-group col-md-8">
+          <label for="sintomasmonitoramento">Sintomas <strong  class="text-warning">(opcional)</strong></label>
+          <select id="sintomasmonitoramento" name="sintomasmonitoramento[]" multiple="multiple">
+              @foreach($sintomas_monitoramento as $sintoma)
+              <option value="{{$sintoma->id}}">{{$sintoma->descricao}}</option>
+              @endforeach
+          </select>
+        </div>  
+        <div class="form-group col-md-4">
+          <label for="febre">Apresentando febre?<strong  class="text-danger">(*)</strong></label>
+          <select class="form-control {{ $errors->has('febre') ? ' is-invalid' : '' }}" name="febre" id="febre">
+            <option value="">Selecione</option>
+            <option value="nao" {{ old('febre') == 'nao' ? 'selected':'' }}>Não</option>
+            <option value="sim"  {{ old('febre') == 'sim' ? 'selected':'' }}>Sim</option>
+            <option value="nao atendeu"  {{ old('febre') == 'nao atendeu' ? 'selected':'' }}>Não Atendeu</option>
+          </select>
+          @if ($errors->has('febre'))
+          <div class="invalid-feedback">
+          {{ $errors->first('febre') }}
+          </div>
+          @endif           
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <label for="diabetico">É diabético?<strong  class="text-danger">(*)</strong></label>
+          <select class="form-control {{ $errors->has('diabetico') ? ' is-invalid' : '' }}" name="diabetico" id="diabetico">
+            <option value="">Selecione</option>
+            <option value="nao" {{ old('diabetico') == 'nao' ? 'selected':'' }}>Não</option>
+            <option value="sim"  {{ old('diabetico') == 'sim' ? 'selected':'' }}>Sim</option>
+            <option value="nao informado"  {{ old('diabetico') == 'nao informado' ? 'selected':'' }}>Não Informado</option>
+            <option value="nao atendeu"  {{ old('diabetico') == 'nao atendeu' ? 'selected':'' }}>Não Atendeu</option>
+          </select>
+          @if ($errors->has('diabetico'))
+          <div class="invalid-feedback">
+          {{ $errors->first('diabetico') }}
+          </div>
+          @endif           
+        </div>  
+        <div class="form-group col-md-3">
+          <label for="glicemia">Mediu sua glicemia hoje?<strong  class="text-danger">(*)</strong></label>
+          <select class="form-control {{ $errors->has('glicemia') ? ' is-invalid' : '' }}" name="glicemia" id="glicemia">
+            <option value="">Selecione</option>
+            <option value="nao" {{ old('glicemia') == 'nao' ? 'selected':'' }}>Não</option>
+            <option value="menos de 200"  {{ old('glicemia') == 'menos de 200' ? 'selected':'' }}>Menos de 200</option>
+            <option value="200 a 300"  {{ old('glicemia') == '200 a 300' ? 'selected':'' }}>200 a 300</option>
+            <option value="mais de 350"  {{ old('glicemia') == 'mais de 350' ? 'selected':'' }}>Mais de 350</option>
+            <option value="nao informado"  {{ old('glicemia') == 'nao informado' ? 'selected':'' }}>Não Informado</option>
+            <option value="nao atendeu"  {{ old('glicemia') == 'nao atendeu' ? 'selected':'' }}>Não Atendeu</option>
+          </select>
+          @if ($errors->has('glicemia'))
+          <div class="invalid-feedback">
+          {{ $errors->first('glicemia') }}
+          </div>
+          @endif          
+        </div>
+        <div class="form-group col-md-3">
+          <label for="teste">Realizou RT-PCR?<strong  class="text-danger">(*)</strong></label>
+          <select class="form-control {{ $errors->has('teste') ? ' is-invalid' : '' }}" name="teste" id="teste">
+            <option value="">Selecione</option>
+            <option value="nao" {{ old('teste') == 'nao' ? 'selected':'' }}>Não</option>
+            <option value="sim"  {{ old('teste') == 'sim' ? 'selected':'' }}>Sim</option>
+            <option value="nao sabe"  {{ old('teste') == 'nao sabe' ? 'selected':'' }}>Não Sabe</option>
+            <option value="nao atendeu"  {{ old('teste') == 'nao atendeu' ? 'selected':'' }}>Não Atendeu</option>
+          </select>
+          @if ($errors->has('teste'))
+          <div class="invalid-feedback">
+          {{ $errors->first('teste') }}
+          </div>
+          @endif 
+        </div>
+        <div class="form-group col-md-3">
+          <label for="resultado">O resultado foi?<strong  class="text-danger">(*)</strong></label>
+          <select class="form-control {{ $errors->has('resultado') ? ' is-invalid' : '' }}" name="resultado" id="resultado">
+            <option value="">Selecione</option>
+            <option value="nao" {{ old('resultado') == 'nao' ? 'selected':'' }}>Não Fez o Teste</option>
+            <option value="positivo" {{ old('resultado') == 'positivo' ? 'selected':'' }}>Positivo</option>
+            <option value="negativo"  {{ old('resultado') == 'negativo' ? 'selected':'' }}>Negativo</option>
+            <option value="indeterminado"  {{ old('resultado') == 'indeterminado' ? 'selected':'' }}>Indeterminado</option>
+            <option value="nao sabe"  {{ old('resultado') == 'nao sabe' ? 'selected':'' }}>Não sabe</option>
+            <option value="nao atendeu"  {{ old('resultado') == 'nao atendeu' ? 'selected':'' }}>Não Atendeu</option>
+          </select>
+          @if ($errors->has('resultado'))
+          <div class="invalid-feedback">
+          {{ $errors->first('resultado') }}
+          </div>
+          @endif            
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="historico">História Clinica <strong  class="text-warning">(opcional)</strong></label>
+        <textarea class="form-control" name="historico" id="historico" rows="5">{{ old('historico') ?? '' }}</textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="saude">Como está a sua saúde em relação a ontem?<strong  class="text-danger">(*)</strong></label>
+          <select class="form-control {{ $errors->has('saude') ? ' is-invalid' : '' }}" name="saude" id="saude">
+            <option value="">Selecione</option>
+            <option value="pior" {{ old('saude') == 'pior' ? 'selected':'' }}>Pior</option>
+            <option value="igual"  {{ old('saude') == 'igual' ? 'selected':'' }}>Igual</option>
+            <option value="melhor"  {{ old('saude') == 'melhor' ? 'selected':'' }}>Melhor</option>
+            <option value="nao atendeu"  {{ old('saude') == 'nao atendeu' ? 'selected':'' }}>Não Atendeu</option>
+          </select>
+          @if ($errors->has('saude'))
+          <div class="invalid-feedback">
+          {{ $errors->first('saude') }}
+          </div>
+          @endif 
+        </div>  
+        <div class="form-group col-md-4">
+          <label for="familia">Existem pessoas vacinadas em sua casa?<strong  class="text-danger">(*)</strong></label>
+          <select class="form-control {{ $errors->has('familia') ? ' is-invalid' : '' }}" name="familia" id="familia">
+            <option value="">Selecione</option>
+            <option value="nao" {{ old('familia') == 'nao' ? 'selected':'' }}>Não</option>
+            <option value="sim"  {{ old('familia') == 'sim' ? 'selected':'' }}>Sim</option>
+            <option value="nao sabe"  {{ old('familia') == 'nao sabe' ? 'selected':'' }}>Não Sabe</option>
+            <option value="nao atendeu"  {{ old('familia') == 'nao atendeu' ? 'selected':'' }}>Não Atendeu</option>
+          </select>
+          @if ($errors->has('familia'))
+          <div class="invalid-feedback">
+          {{ $errors->first('familia') }}
+          </div>
+          @endif          
+        </div>
+        <div class="form-group col-md-4">
+          <label for="quantas">Quantas?<strong  class="text-warning">(Opcional)</strong></label>
+          <input type="number" class="form-control" name="quantas" value="{{ old('quantas') ?? '' }}"> 
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary"><i class="fas fa-plus-square"></i> Salvar Monitoramento</button>
+  </form>
+
 </div>
 
+<br>
+<div class="container bg-warning text-dark">
+  <p class="text-center"><strong>Monitoramentos Realizados</strong></p>
+</div>
 
+@foreach($monitoramentos as $monitoramento)
+
+<div class="container">
+  <div class="row py-2">
+    <div class="col-sm-3">
+      Data: {{ $monitoramento->created_at->format('d/m/Y') }}
+    </div>
+    <div class="col-sm-3">
+      Hora: {{ $monitoramento->created_at->format('H:i') }}
+    </div>
+    <div class="col-sm-6">
+      Responsável: {{ $monitoramento->user->name }}
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      Sintomas
+    </div>
+    <div class="card-body">
+      @foreach($monitoramento->sintomas as $sintoma)
+        <span class="lead"><span class="badge badge-light">{{ $sintoma->descricao }}</span></span>
+      @endforeach
+    </div> 
+  </div>
+</div>
+
+<div class="container">
+  <div class="row py-2">
+    <div class="col-sm-4">
+      Apresentando febre? {{ $monitoramento->febre }}  
+    </div>
+    <div class="col-sm-4">
+      É diabético?  {{ $monitoramento->diabetico }}
+    </div>
+    <div class="col-sm-4">
+      Mediu sua glicemia hoje?  {{ $monitoramento->glicemia }} 
+    </div>
+  </div>
+  <div class="row py-2">
+    <div class="col-sm-4">
+      Realizou RT-PCR?  {{ $monitoramento->teste }} 
+    </div>
+    <div class="col-sm-4">
+      O resultado foi?  {{ $monitoramento->resultado }}
+    </div>
+    <div class="col-sm-4">
+      Como está a sua saúde em relação a ontem?  {{ $monitoramento->saude }}
+    </div>    
+  </div>
+  <div class="row py-2">
+    <div class="col-sm-12">
+      <strong>História Clinica:</strong>  {{ $monitoramento->historico }} 
+    </div>
+  </div>  
+  <div class="row py-2">
+    <div class="col-sm-6">
+      Existem pessoas vacinadas em sua casa?  {{ $monitoramento->familia }} 
+    </div>
+    <div class="col-sm-6">
+      Quantas? {{ $monitoramento->quantas }} 
+    </div>
+  </div> 
+  <hr class="my-4">
+</div>
+
+@endforeach
+<br>
 <div class="container">
   <div class="float-right">
     <a href="{{ route('pacientes.index') }}" class="btn btn-secondary btn-sm" role="button"><i class="fas fa-long-arrow-alt-left"></i> Voltar</i></a>
@@ -402,6 +635,11 @@
               });
 
       $('#doencas').multiselect({
+                includeSelectAllOption: true,
+                buttonWidth: '100%'
+              });
+
+      $('#sintomasmonitoramento').multiselect({
                 includeSelectAllOption: true,
                 buttonWidth: '100%'
               });

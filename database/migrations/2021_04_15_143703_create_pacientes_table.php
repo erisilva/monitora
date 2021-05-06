@@ -41,7 +41,7 @@ class CreatePacientesTable extends Migration
             $table->bigInteger('unidade_id')->unsigned();
 
             // dados iniciais de monitoramento
-            $table->date('ultimoMonitoramento')->nullable();
+            $table->datetime('ultimoMonitoramento')->nullable();
             $table->string('tomouVacina'); // pode ser: não, 1 dose, 2 doses
             $table->date('inicioSintomas');
             // iniciar monitoramento - Não monitorado, Monitorando, Finalizado

@@ -30,7 +30,7 @@ class CreateMonitoramentosTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('saude'); // como está sua saúde hoje: pior, igual, melhor
             $table->string('familia'); // existem pessoas na família com covid? sim, não, não sabe, não atendeu
-            $table->string('quantas'); // numerico e opcional
+            $table->string('quantas')->nullable(); // numerico e opcional
 
 
             $table->timestamps();

@@ -110,7 +110,20 @@
       <div class="form-group col-md-4">
         <label for="tomouVacina">Situação</label>
         <p class="situacao">
-          Monitorado/Alta/Não (implementar)
+          @php
+            if ($paciente->monitorando == 'n') {
+              $situacao = 'Não Monitorado';
+            }
+
+            if ($paciente->monitorando == 's') {
+              $situacao = 'Monitorado ' . $paciente->ultimoMonitoramento->diffForHumans();
+            }
+
+            if ($paciente->monitorando == 'f') {
+              $situacao = 'Alta em ' . $paciente->ultimoMonitoramento->format('d/m/Y');
+            }
+          @endphp
+          <strong>{{ $situacao }}</strong>
         </p>     
       </div> 
     </div>
@@ -175,10 +188,82 @@
         <input type="text" class="form-control" name="nome" value="{{ $paciente->user->name }}" readonly>
       </div> 
     </div>
-
-
   </form>
 
+<br>
+<div class="container bg-warning text-dark">
+  <p class="text-center"><strong>Monitoramentos Realizados</strong></p>
+</div>
+
+@foreach($monitoramentos as $monitoramento)
+
+<div class="container">
+  <div class="row py-2">
+    <div class="col-sm-3">
+      Data: {{ $monitoramento->created_at->format('d/m/Y') }}
+    </div>
+    <div class="col-sm-3">
+      Hora: {{ $monitoramento->created_at->format('H:i') }}
+    </div>
+    <div class="col-sm-6">
+      Responsável: {{ $monitoramento->user->name }}
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      Sintomas
+    </div>
+    <div class="card-body">
+      @foreach($monitoramento->sintomas as $sintoma)
+        <span class="lead"><span class="badge badge-light">{{ $sintoma->descricao }}</span></span>
+      @endforeach
+    </div> 
+  </div>
+</div>
+
+<div class="container">
+  <div class="row py-2">
+    <div class="col-sm-4">
+      Apresentando febre? {{ $monitoramento->febre }}  
+    </div>
+    <div class="col-sm-4">
+      É diabético?  {{ $monitoramento->diabetico }}
+    </div>
+    <div class="col-sm-4">
+      Mediu sua glicemia hoje?  {{ $monitoramento->glicemia }} 
+    </div>
+  </div>
+  <div class="row py-2">
+    <div class="col-sm-4">
+      Realizou RT-PCR?  {{ $monitoramento->teste }} 
+    </div>
+    <div class="col-sm-4">
+      O resultado foi?  {{ $monitoramento->resultado }}
+    </div>
+    <div class="col-sm-4">
+      Como está a sua saúde em relação a ontem?  {{ $monitoramento->saude }}
+    </div>    
+  </div>
+  <div class="row py-2">
+    <div class="col-sm-12">
+      <strong>História Clinica:</strong>  {{ $monitoramento->historico }} 
+    </div>
+  </div>  
+  <div class="row py-2">
+    <div class="col-sm-6">
+      Existem pessoas vacinadas em sua casa?  {{ $monitoramento->familia }} 
+    </div>
+    <div class="col-sm-6">
+      Quantas? {{ $monitoramento->quantas }} 
+    </div>
+  </div> 
+  <hr class="my-4">
+</div>
+
+@endforeach
 <br>
   <div class="container">
     <a href="{{ route('pacientes.index') }}" class="btn btn-primary" role="button"><i class="fas fa-long-arrow-alt-left"></i> Voltar</i></a>

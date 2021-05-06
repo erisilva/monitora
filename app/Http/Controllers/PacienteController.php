@@ -6,7 +6,9 @@ use App\Paciente;
 use App\Distrito;
 use App\DoencasBase;
 use App\SintomasCadastro;
+use App\Sintoma;
 use App\Comorbidade;
+use App\Monitoramento;
 use App\Perpage;
 
 use Response;
@@ -53,6 +55,10 @@ class PacienteController extends Controller
      */
     public function index()
     {
+        if (Gate::denies('paciente-index')) {
+            abort(403, 'Acesso negado.');
+        }
+
         $pacientes = new Paciente;
 
         // filtros
@@ -134,6 +140,10 @@ class PacienteController extends Controller
      */
     public function create()
     {
+        if (Gate::denies('paciente-create')) {
+            abort(403, 'Acesso negado.');
+        }
+
         $comorbidades = Comorbidade::orderBy('descricao', 'asc')->get();
 
         $sintomas = SintomasCadastro::orderBy('descricao', 'asc')->get();
@@ -187,7 +197,7 @@ class PacienteController extends Controller
         $paciente['user_id'] = $user->id;
 
         // coloca a situação do monitoramento como não monitorado
-        $paciente['monitorando'] = 's';
+        $paciente['monitorando'] = 'n';
 
         // ajuste de data de nascimento
         $dataFormatadaMysql = Carbon::createFromFormat('d/m/Y', request('nascimento'))->format('Y-m-d');
@@ -228,9 +238,15 @@ class PacienteController extends Controller
      */
     public function show($id)
     {
+        if (Gate::denies('paciente-show')) {
+            abort(403, 'Acesso negado.');
+        }
+
         $paciente = Paciente::findOrFail($id);
 
-        return view('pacientes.show', compact('paciente'));
+        $monitoramentos = Monitoramento::where('paciente_id', '=', $id)->orderBy('id', 'desc')->get();
+
+        return view('pacientes.show', compact('paciente', 'monitoramentos'));
     }
 
     /**
@@ -241,15 +257,23 @@ class PacienteController extends Controller
      */
     public function edit($id)
     {
+        if (Gate::denies('paciente-edit')) {
+            abort(403, 'Acesso negado.');
+        }
+
         $paciente = Paciente::findOrFail($id);
 
         $comorbidades = Comorbidade::orderBy('descricao', 'asc')->get();
 
         $sintomas = SintomasCadastro::orderBy('descricao', 'asc')->get();
 
+        $sintomas_monitoramento = Sintoma::orderBy('descricao', 'asc')->get();
+
         $doencas = DoencasBase::orderBy('descricao', 'asc')->get();
 
-        return view('pacientes.edit', compact('paciente', 'comorbidades', 'sintomas', 'doencas'));
+        $monitoramentos = Monitoramento::where('paciente_id', '=', $id)->orderBy('id', 'desc')->get();
+
+        return view('pacientes.edit', compact('paciente', 'comorbidades', 'sintomas', 'doencas', 'sintomas_monitoramento', 'monitoramentos'));
     }
 
     /**
@@ -370,6 +394,10 @@ class PacienteController extends Controller
      */
     public function destroy($id)
     {
+        if (Gate::denies('paciente-delete')) {
+            abort(403, 'Acesso negado.');
+        }
+        
         Paciente::findOrFail($id)->delete();
 
         Session::flash('deleted_paciente', 'Paciente enviado para lixeira!');

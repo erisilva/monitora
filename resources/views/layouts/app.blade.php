@@ -36,7 +36,11 @@
                 @if (!Auth::guest())
                 <ul class="navbar-nav mr-auto">                    
                     <li class="nav-item">
-                        <a class="nav-link" href="#">TO-DO</a>
+                        <a class="nav-link" href="{{ route('pacientes.index') }}">Pacientes</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('monitoramentos.index') }}">Monitoramentos</a>
                     </li>
 
                     <li class="nav-item dropdown">

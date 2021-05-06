@@ -105,6 +105,21 @@ class acl extends Seeder
 		$comorbidade_delete = Permission::where('name', '=', 'comorbidade-delete')->get()->first();
 		$comorbidade_show = Permission::where('name', '=', 'comorbidade-show')->get()->first();  
 		$comorbidade_export = Permission::where('name', '=', 'comorbidade-export')->get()->first();
+		// para pacientes
+		$paciente_index = Permission::where('name', '=', 'paciente-index')->get()->first(); 
+		$paciente_create = Permission::where('name', '=', 'paciente-create')->get()->first();
+		$paciente_edit = Permission::where('name', '=', 'paciente-edit')->get()->first();  
+		$paciente_delete = Permission::where('name', '=', 'paciente-delete')->get()->first();
+		$paciente_show = Permission::where('name', '=', 'paciente-show')->get()->first();  
+		$paciente_export = Permission::where('name', '=', 'paciente-export')->get()->first();
+		// para monitoramentos
+		$monitoramento_index = Permission::where('name', '=', 'monitoramento-index')->get()->first(); 
+		$monitoramento_create = Permission::where('name', '=', 'monitoramento-create')->get()->first();
+		$monitoramento_edit = Permission::where('name', '=', 'monitoramento-edit')->get()->first();  
+		$monitoramento_delete = Permission::where('name', '=', 'monitoramento-delete')->get()->first();
+		$monitoramento_show = Permission::where('name', '=', 'monitoramento-show')->get()->first();  
+		$monitoramento_export = Permission::where('name', '=', 'monitoramento-export')->get()->first();
+
 
 		// salva os relacionamentos entre perfil e suas permissões
 		
@@ -170,6 +185,20 @@ class acl extends Seeder
 		$administrador_perfil->permissions()->attach($comorbidade_delete);
 		$administrador_perfil->permissions()->attach($comorbidade_show);
 		$administrador_perfil->permissions()->attach($comorbidade_export);
+		# pacientes
+		$administrador_perfil->permissions()->attach($paciente_index);
+		$administrador_perfil->permissions()->attach($paciente_create);
+		$administrador_perfil->permissions()->attach($paciente_edit);
+		$administrador_perfil->permissions()->attach($paciente_delete);
+		$administrador_perfil->permissions()->attach($paciente_show);
+		$administrador_perfil->permissions()->attach($paciente_export);
+		# monitoramentos
+		$administrador_perfil->permissions()->attach($monitoramento_index);
+		$administrador_perfil->permissions()->attach($monitoramento_create);
+		$administrador_perfil->permissions()->attach($monitoramento_edit);
+		$administrador_perfil->permissions()->attach($monitoramento_delete);
+		$administrador_perfil->permissions()->attach($monitoramento_show);
+		$administrador_perfil->permissions()->attach($monitoramento_export);
 
 
 		// o gerente (diretor) pode gerenciar os operadores do sistema
@@ -214,7 +243,20 @@ class acl extends Seeder
 		$gerente_perfil->permissions()->attach($comorbidade_edit);
 		$gerente_perfil->permissions()->attach($comorbidade_show);
 		$gerente_perfil->permissions()->attach($comorbidade_export);
-
+		# pacientes
+		$gerente_perfil->permissions()->attach($paciente_index);
+		$gerente_perfil->permissions()->attach($paciente_create);
+		$gerente_perfil->permissions()->attach($paciente_edit);
+		$gerente_perfil->permissions()->attach($paciente_delete);
+		$gerente_perfil->permissions()->attach($paciente_show);
+		$gerente_perfil->permissions()->attach($paciente_export);
+		# monitoramentos
+		$gerente_perfil->permissions()->attach($monitoramento_index);
+		$gerente_perfil->permissions()->attach($monitoramento_create);
+		$gerente_perfil->permissions()->attach($monitoramento_edit);
+		$gerente_perfil->permissions()->attach($monitoramento_delete);
+		$gerente_perfil->permissions()->attach($monitoramento_show);
+		$gerente_perfil->permissions()->attach($monitoramento_export);
 
 
 		// o operador é o nível de operação do sistema não pode criar
@@ -246,7 +288,18 @@ class acl extends Seeder
 		$operador_perfil->permissions()->attach($comorbidade_index);
 		$operador_perfil->permissions()->attach($comorbidade_show);
 		$operador_perfil->permissions()->attach($comorbidade_export);
-
+		#paciente
+		$operador_perfil->permissions()->attach($paciente_index);
+		$operador_perfil->permissions()->attach($paciente_create);
+		$operador_perfil->permissions()->attach($paciente_edit);
+		$operador_perfil->permissions()->attach($paciente_show);
+		$operador_perfil->permissions()->attach($paciente_export);
+		#paciente
+		$operador_perfil->permissions()->attach($monitoramento_index);
+		$operador_perfil->permissions()->attach($monitoramento_create);
+		$operador_perfil->permissions()->attach($monitoramento_edit);
+		$operador_perfil->permissions()->attach($monitoramento_show);
+		$operador_perfil->permissions()->attach($monitoramento_export);
 
 
 		// leitura é um tipo de operador que só pode ler
@@ -271,7 +324,12 @@ class acl extends Seeder
 		# comorbidades
 		$leitor_perfil->permissions()->attach($comorbidade_index);
 		$leitor_perfil->permissions()->attach($comorbidade_show);
-
+		# pacientes
+		$leitor_perfil->permissions()->attach($paciente_index);
+		$leitor_perfil->permissions()->attach($paciente_show);
+		# monitoramentos
+		$leitor_perfil->permissions()->attach($monitoramento_index);
+		$leitor_perfil->permissions()->attach($monitoramento_show);
 
     }
 }

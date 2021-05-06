@@ -11,4 +11,19 @@ protected $fillable = [
     ];
 
     protected $dates = ['created_at'];
+
+    public function sintomas()
+    {
+        return $this->belongsToMany('App\Sintoma');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function paciente()
+    {
+        return $this->belongsTo('App\Paciente');
+    }   
 }

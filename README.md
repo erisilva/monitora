@@ -2,7 +2,9 @@
 
 ## Sobre
 
-Sistema de monitoramento de pacientes com Covid
+Sistema de monitoramento de pacientes com Covid.
+
+Cadastro de pacientes e ficha de monitoramento.
 
 Esse sistema foi constuído com a framework [Laravel](https://laravel.com/), na versão 7.x e usa como front-end [Bootstrap 4.5](https://getbootstrap.com/).
 
@@ -69,6 +71,10 @@ Dica: [CMDER](https://cmder.net/) é um substituto do console (prompt) de comand
 ### clonar o reposítório
 
 git clone https://github.com/erisilva/acl70.git
+
+### baixar as bibliotecas
+
+composer update
 
 ### criar o banco de dados
 

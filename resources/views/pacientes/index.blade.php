@@ -46,6 +46,7 @@
                 <th scope="col">Idade</th>
                 <th scope="col">Unidade</th>
                 <th scope="col">Distrito</th>
+                <th scope="col">Situação</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -58,6 +59,20 @@
                 <td>{{$paciente->idade}}</td>
                 <td>{{$paciente->unidade->descricao}}</td>
                 <td>{{$paciente->unidade->distrito->nome}}</td>
+                @php
+                  if ($paciente->monitorando == 'n') {
+                    $situacao = 'Não Monitorado';
+                  }
+
+                  if ($paciente->monitorando == 's') {
+                    $situacao = 'Monitorado ' . $paciente->ultimoMonitoramento->diffForHumans();
+                  }
+
+                  if ($paciente->monitorando == 'f') {
+                    $situacao = 'Alta em ' . $paciente->ultimoMonitoramento->format('d/m/Y');
+                  }
+                @endphp
+                <td><strong>{{ $situacao }}</strong></td>
                 <td>
                   <div class="btn-group" role="group">
                     <a href="{{route('pacientes.edit', $paciente->id)}}" class="btn btn-primary btn-sm" role="button"><i class="fas fa-edit"></i></a>

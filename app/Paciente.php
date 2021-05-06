@@ -39,4 +39,9 @@ class Paciente extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function monitoramento()
+    {
+        return $this->belongsTo('App\Monitoramento');
+    }
 }

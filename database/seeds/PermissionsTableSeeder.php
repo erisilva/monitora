@@ -248,6 +248,60 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->insert([
             'name' => 'comorbidade-export',
             'description' => 'Exportação de dados dos comorbidades',
-        ]);        
+        ]);
+
+
+        // Pacientes
+        DB::table('permissions')->insert([
+            'name' => 'paciente-index',
+            'description' => 'Lista de pacientes',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'paciente-create',
+            'description' => 'Registrar novo paciente',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'paciente-edit',
+            'description' => 'Alterar dados do paciente',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'paciente-delete',
+            'description' => 'Excluir paciente',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'paciente-show',
+            'description' => 'Mostrar dados do paciente',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'paciente-export',
+            'description' => 'Exportação de dados dos pacientes',
+        ]);
+
+
+        // Pacientes
+        DB::table('permissions')->insert([
+            'name' => 'monitoramento-index',
+            'description' => 'Lista de monitoramentos',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'monitoramento-create',
+            'description' => 'Registrar novo monitoramento',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'monitoramento-edit',
+            'description' => 'Alterar dados do monitoramento',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'monitoramento-delete',
+            'description' => 'Excluir monitoramento',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'monitoramento-show',
+            'description' => 'Mostrar dados do monitoramento',
+        ]);
+        DB::table('permissions')->insert([
+            'name' => 'monitoramento-export',
+            'description' => 'Exportação de dados dos monitoramentos',
+        ]);       
     }
 }
