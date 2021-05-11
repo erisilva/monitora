@@ -96,13 +96,11 @@ class PacienteController extends Controller
             }
         }
 
-        // if (request()->has('idadeMin')){
-        //     $pacientes = $pacientes->where('idade', '>=', request('idadeMin'));
-        // }
-
-        // if (request()->has('idadeMax')){
-        //     $pacientes = $pacientes->where('idade', '<=', request('idadeMax'));
-        // }
+        if (request()->has('situacao')){
+            if (request('situacao') != ""){
+                $pacientes = $pacientes->where('monitorando', '=', request('situacao'));
+            }
+        }
 
         // ordena
         $pacientes = $pacientes->orderBy('nome', 'asc');
@@ -314,16 +312,8 @@ class PacienteController extends Controller
 
         $paciente_input = $request->all();
 
-        $user = Auth::user();
-
         // calcula a idade
         $paciente_input['idade'] = Carbon::createFromFormat('d/m/Y', $paciente_input['nascimento'])->age;
-
-       //salva o usuario que fez o cadastro
-        $paciente_input['user_id'] = $user->id;
-
-        // coloca a situação do monitoramento como não monitorado
-        $paciente_input['monitorando'] = 's';
 
         // ajuste de data de nascimento
         $dataFormatadaMysql = Carbon::createFromFormat('d/m/Y', request('nascimento'))->format('Y-m-d');
@@ -404,4 +394,108 @@ class PacienteController extends Controller
 
         return redirect(route('pacientes.index'));
     }
+
+
+    /**
+     * Exportação para planilha (csv)
+     *
+     * @param  int  $id
+     * @return Response::stream()
+     */
+    public function exportcsv()
+    {
+        if (Gate::denies('sintoma-export')) {
+            abort(403, 'Acesso negado.');
+        }
+
+       $headers = [
+                'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0'
+            ,   'Content-type'        => 'text/csv'
+            ,   'Content-Disposition' => 'attachment; filename=Pacientes_' .  date("Y-m-d H:i:s") . '.csv'
+            ,   'Expires'             => '0'
+            ,   'Pragma'              => 'public'
+        ];
+
+        $pacientes = DB::table('pacientes');
+
+        // joins
+        $pacientes = $pacientes->join('unidades', 'unidades.id', '=', 'pacientes.unidade_id');
+        $pacientes = $pacientes->join('distritos', 'distritos.id', '=', 'unidades.distrito_id');
+        $pacientes = $pacientes->join('users', 'users.id', '=', 'pacientes.user_id');
+
+        // select
+        $pacientes = $pacientes->select(
+            'pacientes.nome',
+            'pacientes.nomeMae',
+            DB::raw('DATE_FORMAT(pacientes.nascimento, \'%d/%m/%Y\') AS nascimento'),            
+            
+            'pacientes.idade',
+            'unidades.descricao as unidade',
+            'distritos.nome as distrito',
+
+            DB::raw('DATE_FORMAT(pacientes.ultimoMonitoramento, \'%d/%m/%Y\') AS ultimo_monitoramento'),
+            
+
+            DB::raw('DATE_FORMAT(pacientes.inicioSintomas, \'%d/%m/%Y\') AS inicio_sintomas'),
+
+            'pacientes.tomouVacina as tomou_vacina',
+
+            DB::raw('(select group_concat(b.descricao) from paciente_sintomas_cadastro a inner join sintomas_cadastros b on a.sintomas_cadastro_id =b.id where a.paciente_id = pacientes.id) as sintomas_iniciais'),
+
+            DB::raw('( select group_concat(b.descricao) from comorbidade_paciente a inner join comorbidades b on a.comorbidade_id = b.id where a.paciente_id = pacientes.id) as comorbidades'),
+
+            DB::raw('(select group_concat(b.descricao) from doencas_base_paciente a inner join doencas_bases b on a.doencas_base_id = b.id where a.paciente_id = pacientes.id) as doencas_base'),
+
+            'pacientes.monitorando as monitorando',
+
+            'pacientes.cel1', 
+            'pacientes.cel2', 
+            'pacientes.email', 
+            'pacientes.cep', 
+            'pacientes.logradouro', 
+            'pacientes.bairro', 
+            'pacientes.numero', 
+            'pacientes.complemento', 
+            'pacientes.cidade', 
+            'pacientes.uf', 
+
+            'users.name as funcionario',
+            DB::raw('DATE_FORMAT(pacientes.created_at, \'%d/%m/%Y\') AS data'),
+            DB::raw('DATE_FORMAT(pacientes.created_at, \'%H:%i\') AS hora'),
+
+            'pacientes.notas', 
+
+        );
+
+        //filtros
+        if (request()->has('nome')){
+            $pacientes = $pacientes->where('profissionals.nome', 'like', '%' . request('nome') . '%');
+        }
+
+        if (request()->has('nomeMae')){
+            $pacientes = $pacientes->where('profissionals.nomeMae', 'like', '%' . request('nomeMae') . '%');
+        }
+
+        $pacientes = $pacientes->orderBy('nome', 'asc');
+
+        $list = $pacientes->get()->toArray();
+
+        # converte os objetos para uma array
+        $list = json_decode(json_encode($list), true);
+
+        # add headers for each column in the CSV download
+        array_unshift($list, array_keys($list[0]));
+
+       $callback = function() use ($list)
+        {
+            $FH = fopen('php://output', 'w');
+            fputs($FH, $bom = ( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+            foreach ($list as $row) {
+                fputcsv($FH, $row, chr(9));
+            }
+            fclose($FH);
+        };
+
+        return Response::stream($callback, 200, $headers);
+    }    
 }

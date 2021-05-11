@@ -32,7 +32,6 @@
       </button>
       <div class="dropdown-menu" aria-labelledby="btnGroupDropOptions">
         <a class="dropdown-item" href="#" id="btnExportarCSV"><i class="fas fa-file-download"></i> Exportar Planilha</a>
-        <a class="dropdown-item" href="#" id="btnExportarPDF"><i class="fas fa-file-download"></i> Exportar PDF</a>
       </div>
     </div>
   </div>
@@ -139,7 +138,13 @@
                 <input type="number" class="form-control" id="idadeMax" name="idadeMax" value="{{request()->input('idadeMax')}}">
               </div>
               <div class="form-group col-md-6">
-
+                <label for="situacao">Situação do Paciente</label>
+                <select class="form-control" name="situacao" id="situacao">
+                  <option value="" selected>Mostrar Todos</option>
+                  <option value="n">Mostrar Somente Pacientes Não Monitorados</option>
+                  <option value="s">Mostrar Somente Pacientes Monitorados</option>
+                  <option value="f">Mostrar Somente Pacientes com Alta</option>
+                </select>
               </div>
             </div>
               
@@ -177,9 +182,6 @@ $(document).ready(function(){
         window.open("{{ route('pacientes.export.csv') }}","_self");
     });
 
-    $('#btnExportarPDF').on('click', function(){
-        window.open("{{ route('pacientes.export.pdf') }}","_self");
-    });
 }); 
 </script>
 @endsection
