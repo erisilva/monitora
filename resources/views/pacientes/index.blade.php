@@ -46,6 +46,7 @@
                 <th scope="col">Unidade</th>
                 <th scope="col">Distrito</th>
                 <th scope="col">Situação</th>
+                <th scope="col">Quando</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -59,19 +60,33 @@
                 <td>{{$paciente->unidade->descricao}}</td>
                 <td>{{$paciente->unidade->distrito->nome}}</td>
                 @php
-                  if ($paciente->monitorando == 'n') {
-                    $situacao = 'Não Monitorado';
-                  }
+                if ($paciente->monitorando == 'nao') {
+                  $situacao = 'Não Monitorado';
+                }
 
-                  if ($paciente->monitorando == 's') {
-                    $situacao = 'Monitorado ' . $paciente->ultimoMonitoramento->diffForHumans();
-                  }
+                if ($paciente->monitorando == 'm24') {
+                  $situacao = 'Monitorar em 24hs';
+                }
 
-                  if ($paciente->monitorando == 'f') {
-                    $situacao = 'Alta em ' . $paciente->ultimoMonitoramento->format('d/m/Y');
-                  }
+                if ($paciente->monitorando == 'm48') {
+                  $situacao = 'Monitorar em 48hs';
+                }
+
+                if ($paciente->monitorando == 'enc') {
+                  $situacao = 'Encaminhado para Unidade';
+                }
+
+                if ($paciente->monitorando == 'alta') {
+                  $situacao = 'Recebeu Alta';
+                }
+
                 @endphp
-                <td><strong>{{ $situacao }}</strong></td>
+                <td>{{ $situacao }}</td>
+                @if(empty($paciente->ultimoMonitoramento))
+                  <td><strong>Não Monitorado</strong></td>
+                @else
+                  <td><strong>Monitorado {{ $paciente->ultimoMonitoramento->diffForHumans() }}</strong></td>
+                @endif
                 <td>
                   <div class="btn-group" role="group">
                     <a href="{{route('pacientes.edit', $paciente->id)}}" class="btn btn-primary btn-sm" role="button"><i class="fas fa-edit"></i></a>
@@ -141,9 +156,11 @@
                 <label for="situacao">Situação do Paciente</label>
                 <select class="form-control" name="situacao" id="situacao">
                   <option value="" selected>Mostrar Todos</option>
-                  <option value="n">Mostrar Somente Pacientes Não Monitorados</option>
-                  <option value="s">Mostrar Somente Pacientes Monitorados</option>
-                  <option value="f">Mostrar Somente Pacientes com Alta</option>
+                  <option value="nao">Mostrar Pacientes Não Monitorados</option>
+                  <option value="m24">Mostrar Pacientes Monitorados com retorno em 24hs</option>
+                  <option value="m48">Mostrar Pacientes Monitorados com retorno em 48hs</option>
+                  <option value="enc">Mostrar Pacientes Monitorados Encaminhados para Unidade</option>
+                  <option value="alta">Mostrar Pacientes com Alta</option>
                 </select>
               </div>
             </div>
@@ -179,7 +196,9 @@ $(document).ready(function(){
     });
 
     $('#btnExportarCSV').on('click', function(){
-        window.open("{{ route('pacientes.export.csv') }}","_self");
+        var filtro_nome = $('input[name="nome"]').val();
+        var filtro_nomeMae = $('input[name="nomeMae"]').val();
+        window.open("{{ route('pacientes.export.csv') }}"  + "?nome=" + filtro_nome + "&nomeMae=" + filtro_nomeMae,"_self");
     });
 
 }); 

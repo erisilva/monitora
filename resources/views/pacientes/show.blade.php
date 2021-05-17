@@ -99,31 +99,49 @@
     </div>
 
     <div class="form-row">
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-2">
         <label for="inicioSintomas">Data Início Sintomas</label>
         <input type="text" class="form-control" name="inicioSintomas" value="{{ $paciente->inicioSintomas->format('d/m/Y') }}" readonly>          
       </div> 
       <div class="form-group col-md-4">
         <label for="tomouVacina">Tomou Vacina?</label>
         <input type="text" class="form-control" name="tomouVacina" value="{{ $paciente->tomouVacina }}" readonly>
-      </div> 
-      <div class="form-group col-md-4">
-        <label for="tomouVacina">Situação</label>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="situacao">Situação</label>
         <p class="situacao">
           @php
-            if ($paciente->monitorando == 'n') {
-              $situacao = 'Não Monitorado';
-            }
+          if ($paciente->monitorando == 'nao') {
+            $situacao = 'Não Monitorado';
+          }
 
-            if ($paciente->monitorando == 's') {
-              $situacao = 'Monitorado ' . $paciente->ultimoMonitoramento->diffForHumans();
-            }
+          if ($paciente->monitorando == 'm24') {
+            $situacao = 'Monitorar em 24hs';
+          }
 
-            if ($paciente->monitorando == 'f') {
-              $situacao = 'Alta em ' . $paciente->ultimoMonitoramento->format('d/m/Y');
-            }
+          if ($paciente->monitorando == 'm48') {
+            $situacao = 'Monitorar em 48hs';
+          }
+
+          if ($paciente->monitorando == 'enc') {
+            $situacao = 'Encaminhado para Unidade';
+          }
+
+          if ($paciente->monitorando == 'alta') {
+            $situacao = 'Recebeu Alta';
+          }
           @endphp
           <strong>{{ $situacao }}</strong>
+        </p>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="monitorado">Situação</label>
+        <p class="monitorado">
+          @if(empty($paciente->ultimoMonitoramento))
+            <strong>Não Monitorado</strong>
+          @else
+            <strong>Monitorado {{ $paciente->ultimoMonitoramento->diffForHumans() }}</strong>
+          @endif
         </p>     
       </div> 
     </div>

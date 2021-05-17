@@ -288,7 +288,7 @@
 
 
     <div class="form-row">
-      <div class="form-group col-md-8">
+      <div class="form-group col-md-6">
       <label for="doencas">Doenças de Base <strong  class="text-warning">(opcional)</strong></label>
       <select id="doencas" name="doencas[]" multiple="multiple">
           @foreach($doencas as $doenca)
@@ -311,24 +311,42 @@
           <option value="{{$doenca->id}}"  {{ $selected }}>{{$doenca->descricao}}</option>
           @endforeach
       </select> 
-      </div>  
-      <div class="form-group col-md-4">
-        <label for="tomouVacina">Situação</label>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="situacao">Situação</label>
         <p class="situacao">
           @php
-            if ($paciente->monitorando == 'n') {
-              $situacao = 'Não Monitorado';
-            }
+          if ($paciente->monitorando == 'nao') {
+            $situacao = 'Não Monitorado';
+          }
 
-            if ($paciente->monitorando == 's') {
-              $situacao = 'Monitorado ' . $paciente->ultimoMonitoramento->diffForHumans();
-            }
+          if ($paciente->monitorando == 'm24') {
+            $situacao = 'Monitorar em 24hs';
+          }
 
-            if ($paciente->monitorando == 'f') {
-              $situacao = 'Alta em ' . $paciente->ultimoMonitoramento->format('d/m/Y');
-            }
+          if ($paciente->monitorando == 'm48') {
+            $situacao = 'Monitorar em 48hs';
+          }
+
+          if ($paciente->monitorando == 'enc') {
+            $situacao = 'Encaminhado para Unidade';
+          }
+
+          if ($paciente->monitorando == 'alta') {
+            $situacao = 'Recebeu Alta';
+          }
           @endphp
           <strong>{{ $situacao }}</strong>
+        </p>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="monitorado">Monitorado?</label>
+        <p class="monitorado">
+          @if(empty($paciente->ultimoMonitoramento))
+            <strong>Não Monitorado</strong>
+          @else
+            <strong>Monitorado {{ $paciente->ultimoMonitoramento->diffForHumans() }}</strong>
+          @endif
         </p>
       </div>
     </div>  
@@ -502,6 +520,27 @@
         </div>
       </div>
 
+      <div class="form-row">
+        <div class="form-group col-md-4 bg-primary text-white py-2">
+          <label for="acao">Escolher uma Ação?<strong  class="text-danger">(*)</strong></label>
+          <select class="form-control {{ $errors->has('acao') ? ' is-invalid' : '' }}" name="acao" id="acao">
+            <option value="">Selecione</option>
+            <option value="m24" {{ old('acao') == 'm24' ? 'selected':'' }}>Monitorar em 24hs</option>
+            <option value="m48"  {{ old('acao') == 'm48' ? 'selected':'' }}>Monitorar em 48hs</option>
+            <option value="enc"  {{ old('acao') == 'enc' ? 'selected':'' }}>Encaminhado para Unidade</option>
+            <option value="alta"  {{ old('acao') == 'alta' ? 'selected':'' }}>Dar Alta</option>
+            <option value="nao"  {{ old('acao') == 'nao' ? 'selected':'' }}>Não Atendeu</option>
+          </select>
+          @if ($errors->has('acao'))
+          <div class="invalid-feedback">
+          {{ $errors->first('acao') }}
+          </div>
+          @endif  
+        </div>
+        <div class="form-group col-md-8">
+
+        </div>  
+      </div>  
       <button type="submit" class="btn btn-primary"><i class="fas fa-plus-square"></i> Salvar Monitoramento</button>
   </form>
 

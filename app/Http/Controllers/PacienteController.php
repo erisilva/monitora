@@ -195,7 +195,7 @@ class PacienteController extends Controller
         $paciente['user_id'] = $user->id;
 
         // coloca a situação do monitoramento como não monitorado
-        $paciente['monitorando'] = 'n';
+        $paciente['monitorando'] = 'nao';
 
         // ajuste de data de nascimento
         $dataFormatadaMysql = Carbon::createFromFormat('d/m/Y', request('nascimento'))->format('Y-m-d');
@@ -469,11 +469,11 @@ class PacienteController extends Controller
 
         //filtros
         if (request()->has('nome')){
-            $pacientes = $pacientes->where('profissionals.nome', 'like', '%' . request('nome') . '%');
+            $pacientes = $pacientes->where('pacientes.nome', 'like', '%' . request('nome') . '%');
         }
 
         if (request()->has('nomeMae')){
-            $pacientes = $pacientes->where('profissionals.nomeMae', 'like', '%' . request('nomeMae') . '%');
+            $pacientes = $pacientes->where('pacientes.nomeMae', 'like', '%' . request('nomeMae') . '%');
         }
 
         $pacientes = $pacientes->orderBy('nome', 'asc');

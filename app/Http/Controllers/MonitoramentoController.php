@@ -103,6 +103,7 @@ class MonitoramentoController extends Controller
             'resultado' => 'required',
             'saude' => 'required',
             'familia' => 'required',
+            'acao' => 'required',
 
         ],
         [
@@ -113,6 +114,7 @@ class MonitoramentoController extends Controller
             'resultado.required' => 'Campo obrigatório',
             'saude.required' => 'Campo obrigatório',
             'familia.required' => 'Campo obrigatório',
+            'acao.required' => 'Campo obrigatório',
 
         ]);
 
@@ -133,7 +135,9 @@ class MonitoramentoController extends Controller
 
         $paciente = Paciente::findOrFail($monitoramento['paciente_id']);
         $paciente->ultimoMonitoramento = Carbon::now();
-        $paciente->monitorando = 's';
+        if ($monitoramento['acao'] <> 'nao' ) {
+            $paciente->monitorando = $monitoramento['acao'];
+        }
         $paciente->save();
 
 

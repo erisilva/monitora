@@ -47,7 +47,8 @@ class CreatePacientesTable extends Migration
             // iniciar monitoramento - Não monitorado, Monitorando, Finalizado
             // finalizar monitoramento,
             // reiniciar monitoramento, voltar a fazer o monitoramento
-            $table->enum('monitorando', ['s', 'n', 'f']);
+            // $table->enum('monitorando', ['s', 'n', 'f']);
+            $table->enum('monitorando', ['nao', 'm24', 'm48', 'enc', 'alta']);
 
             // operador que fez o cadastro
             $table->bigInteger('user_id')->unsigned();
