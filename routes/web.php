@@ -82,7 +82,9 @@ Route::resource('/comorbidades', 'ComorbidadeController');
 
 /* Pacientes */
 Route::get('/pacientes/export/csv', 'PacienteController@exportcsv')->name('pacientes.export.csv');
+Route::get('/pacientes/autocomplete', 'PacienteController@autocomplete')->name('pacientes.autocomplete');
 Route::resource('/pacientes', 'PacienteController');
+Route::resource('/cadastros', 'CadastroController');
 
 /* Monitoramento */
 Route::get('/monitoramentos/export/csv', 'MonitoramentoController@exportcsv')->name('monitoramentos.export.csv');

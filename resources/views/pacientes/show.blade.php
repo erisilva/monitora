@@ -174,19 +174,6 @@
     </div>
 
     <div class="form-group">
-        <div class="card">
-          <div class="card-header">
-            Doenças de Base
-          </div>
-          <div class="card-body">
-            @foreach($paciente->doencasBases as $doencas)
-              <span class="lead"><span class="badge badge-light">{{ $doencas->descricao }}</span></span>
-            @endforeach
-          </div>
-        </div>       
-    </div>
-
-    <div class="form-group">
       <label for="notas">Notas/Observações</label>
       <textarea class="form-control" name="notas" id="notas" rows="3" readonly>{{ $paciente->notas }}</textarea>
     </div>
@@ -208,6 +195,7 @@
     </div>
   </form>
 
+@can('monitoramento-index')
 <br>
 <div class="container bg-warning text-dark">
   <p class="text-center"><strong>Monitoramentos Realizados</strong></p>
@@ -272,7 +260,7 @@
   </div>  
   <div class="row py-2">
     <div class="col-sm-6">
-      Existem pessoas vacinadas em sua casa?  {{ $monitoramento->familia }} 
+      Existem pessoas doentes em sua casa?  {{ $monitoramento->familia }} 
     </div>
     <div class="col-sm-6">
       Quantas? {{ $monitoramento->quantas }} 
@@ -282,6 +270,7 @@
 </div>
 
 @endforeach
+@endcan
 <br>
   <div class="container">
     <a href="{{ route('pacientes.index') }}" class="btn btn-primary" role="button"><i class="fas fa-long-arrow-alt-left"></i> Voltar</i></a>

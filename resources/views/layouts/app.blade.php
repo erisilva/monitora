@@ -34,13 +34,13 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 @if (!Auth::guest())
-                <ul class="navbar-nav mr-auto">                    
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pacientes.index') }}">Pacientes</a>
+                        <a class="nav-link" href="{{ route('cadastros.index') }}">Cadastramento</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('monitoramentos.index') }}">Monitoramentos</a>
+                        <a class="nav-link" href="{{ route('pacientes.index') }}">Monitoramento</a>
                     </li>
 
                     <li class="nav-item">
@@ -59,6 +59,8 @@
                           <a class="dropdown-item" href="{{ route('doencasbases.index') }}"><i class="fas fa-cog"></i> Doenças Base (Monitoramento)</a>
                           <a class="dropdown-item" href="{{ route('sintomascadastros.index') }}"><i class="fas fa-cog"></i> Sintomas Iniciais (Cadastro)</a>
                           <a class="dropdown-item" href="{{ route('comorbidades.index') }}"><i class="fas fa-cog"></i> Comorbidades (Cadastro)</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="{{ route('monitoramentos.index') }}"><i class="fas fa-list"></i> Lista de Monitoramentos</a>
                         </div>
                     </li>                    
                 </ul>

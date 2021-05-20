@@ -26,19 +26,22 @@ class acl extends Seeder
         // significar usuário do SUS, ou usuário do plano, em vez de pessoa ou cliente
         $administrador = User::where('email','=','adm@mail.com')->get()->first();
         $gerente = User::where('email','=','gerente@mail.com')->get()->first();
-        $operador = User::where('email','=','operador@mail.com')->get()->first();
+        $operador1 = User::where('email','=','operador1@mail.com')->get()->first();
+        $operador2 = User::where('email','=','operador2@mail.com')->get()->first();
         $leitor = User::where('email','=','leitor@mail.com')->get()->first();
 
         // recebi os perfis
         $administrador_perfil = Role::where('name', '=', 'admin')->get()->first();
         $gerente_perfil = Role::where('name', '=', 'gerente')->get()->first();
-        $operador_perfil = Role::where('name', '=', 'operador')->get()->first();
+        $operador1_perfil = Role::where('name', '=', 'operador1')->get()->first();
+        $operador2_perfil = Role::where('name', '=', 'operador2')->get()->first();
         $leitor_perfil = Role::where('name', '=', 'leitor')->get()->first();
 
         // salva os relacionamentos entre operador e perfil
         $administrador->roles()->attach($administrador_perfil);
         $gerente->roles()->attach($gerente_perfil);
-        $operador->roles()->attach($operador_perfil);
+        $operador1->roles()->attach($operador1_perfil);
+        $operador2->roles()->attach($operador2_perfil);
         $leitor->roles()->attach($leitor_perfil);
 
         // recebi as permissoes
@@ -261,45 +264,86 @@ class acl extends Seeder
 
 		// o operador é o nível de operação do sistema não pode criar
 		// outros operadores
-		$operador_perfil->permissions()->attach($user_index);
-		$operador_perfil->permissions()->attach($user_show);
-		$operador_perfil->permissions()->attach($user_export);
+		$operador1_perfil->permissions()->attach($user_index);
+		$operador1_perfil->permissions()->attach($user_show);
+		$operador1_perfil->permissions()->attach($user_export);
 		# distritos
-		$operador_perfil->permissions()->attach($distrito_index);
-		$operador_perfil->permissions()->attach($distrito_show);
-		$operador_perfil->permissions()->attach($distrito_export);
+		$operador1_perfil->permissions()->attach($distrito_index);
+		$operador1_perfil->permissions()->attach($distrito_show);
+		$operador1_perfil->permissions()->attach($distrito_export);
 		#unidade
-		$operador_perfil->permissions()->attach($unidade_index);
-		$operador_perfil->permissions()->attach($unidade_show);
-		$operador_perfil->permissions()->attach($unidade_export);
+		$operador1_perfil->permissions()->attach($unidade_index);
+		$operador1_perfil->permissions()->attach($unidade_show);
+		$operador1_perfil->permissions()->attach($unidade_export);
 		#sintoma
-		$operador_perfil->permissions()->attach($sintoma_index);
-		$operador_perfil->permissions()->attach($sintoma_show);
-		$operador_perfil->permissions()->attach($sintoma_export);
+		$operador1_perfil->permissions()->attach($sintoma_index);
+		$operador1_perfil->permissions()->attach($sintoma_show);
+		$operador1_perfil->permissions()->attach($sintoma_export);
 		#sintoma
-		$operador_perfil->permissions()->attach($sintoma_cadastro_index);
-		$operador_perfil->permissions()->attach($sintoma_cadastro_show);
-		$operador_perfil->permissions()->attach($sintoma_cadastro_export);
+		$operador1_perfil->permissions()->attach($sintoma_cadastro_index);
+		$operador1_perfil->permissions()->attach($sintoma_cadastro_show);
+		$operador1_perfil->permissions()->attach($sintoma_cadastro_export);
 		#doenças de base
-		$operador_perfil->permissions()->attach($doencasbase_index);
-		$operador_perfil->permissions()->attach($doencasbase_show);
-		$operador_perfil->permissions()->attach($doencasbase_export);
+		$operador1_perfil->permissions()->attach($doencasbase_index);
+		$operador1_perfil->permissions()->attach($doencasbase_show);
+		$operador1_perfil->permissions()->attach($doencasbase_export);
 		#comorbidades
-		$operador_perfil->permissions()->attach($comorbidade_index);
-		$operador_perfil->permissions()->attach($comorbidade_show);
-		$operador_perfil->permissions()->attach($comorbidade_export);
+		$operador1_perfil->permissions()->attach($comorbidade_index);
+		$operador1_perfil->permissions()->attach($comorbidade_show);
+		$operador1_perfil->permissions()->attach($comorbidade_export);
 		#paciente
-		$operador_perfil->permissions()->attach($paciente_index);
-		$operador_perfil->permissions()->attach($paciente_create);
-		$operador_perfil->permissions()->attach($paciente_edit);
-		$operador_perfil->permissions()->attach($paciente_show);
-		$operador_perfil->permissions()->attach($paciente_export);
+		$operador1_perfil->permissions()->attach($paciente_index);
+		$operador1_perfil->permissions()->attach($paciente_create);
+		$operador1_perfil->permissions()->attach($paciente_edit);
+		$operador1_perfil->permissions()->attach($paciente_show);
+		$operador1_perfil->permissions()->attach($paciente_export);
 		#paciente
-		$operador_perfil->permissions()->attach($monitoramento_index);
-		$operador_perfil->permissions()->attach($monitoramento_create);
-		$operador_perfil->permissions()->attach($monitoramento_edit);
-		$operador_perfil->permissions()->attach($monitoramento_show);
-		$operador_perfil->permissions()->attach($monitoramento_export);
+		$operador1_perfil->permissions()->attach($monitoramento_index);
+		$operador1_perfil->permissions()->attach($monitoramento_create);
+		$operador1_perfil->permissions()->attach($monitoramento_edit);
+		$operador1_perfil->permissions()->attach($monitoramento_show);
+		$operador1_perfil->permissions()->attach($monitoramento_export);
+
+
+		// o operador é o nível de operação do sistema não pode criar
+		// outros operadores
+		$operador2_perfil->permissions()->attach($user_index);
+		$operador2_perfil->permissions()->attach($user_show);
+		$operador2_perfil->permissions()->attach($user_export);
+		# distritos
+		$operador2_perfil->permissions()->attach($distrito_index);
+		$operador2_perfil->permissions()->attach($distrito_show);
+		$operador2_perfil->permissions()->attach($distrito_export);
+		#unidade
+		$operador2_perfil->permissions()->attach($unidade_index);
+		$operador2_perfil->permissions()->attach($unidade_show);
+		$operador2_perfil->permissions()->attach($unidade_export);
+		#sintoma
+		$operador2_perfil->permissions()->attach($sintoma_index);
+		$operador2_perfil->permissions()->attach($sintoma_show);
+		$operador2_perfil->permissions()->attach($sintoma_export);
+		#sintoma
+		$operador2_perfil->permissions()->attach($sintoma_cadastro_index);
+		$operador2_perfil->permissions()->attach($sintoma_cadastro_show);
+		$operador2_perfil->permissions()->attach($sintoma_cadastro_export);
+		#doenças de base
+		$operador2_perfil->permissions()->attach($doencasbase_index);
+		$operador2_perfil->permissions()->attach($doencasbase_show);
+		$operador2_perfil->permissions()->attach($doencasbase_export);
+		#comorbidades
+		$operador2_perfil->permissions()->attach($comorbidade_index);
+		$operador2_perfil->permissions()->attach($comorbidade_show);
+		$operador2_perfil->permissions()->attach($comorbidade_export);
+		#paciente
+		$operador2_perfil->permissions()->attach($paciente_index);
+		$operador2_perfil->permissions()->attach($paciente_create);
+		$operador2_perfil->permissions()->attach($paciente_edit);
+		$operador2_perfil->permissions()->attach($paciente_show);
+		$operador2_perfil->permissions()->attach($paciente_export);
+		#monitoramento
+		#nenhum
+
+
 
 
 		// leitura é um tipo de operador que só pode ler

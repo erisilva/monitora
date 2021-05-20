@@ -62,7 +62,6 @@
   <form method="POST" action="{{ route('pacientes.update', $paciente->id) }}">
     @csrf
     @method('PUT')
-
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="nome">Nome<strong  class="text-danger">(*)</strong></label>
@@ -96,9 +95,6 @@
         <input type="text" class="form-control" name="idade" value="{{ $paciente->idade }}" readonly> 
       </div>
     </div>
-
-
-
     <div class="form-row">
       <div class="form-group col-md-3">
         <label for="cns">CNS <strong  class="text-warning">(Opcional)</strong></label>
@@ -110,7 +106,7 @@
         <input type="text" class="form-control typeahead {{ $errors->has('unidade_id') ? ' is-invalid' : '' }}" name="unidade_descricao" id="unidade_descricao" value="{{ old('unidade_descricao') ?? $paciente->unidade->descricao }}" autocomplete="off">       
         <input type="hidden" id="unidade_id" name="unidade_id" value="{{ old('unidade_id') ?? $paciente->unidade_id }}">
         @if ($errors->has('unidade_id'))
-          <div class="invalid-feedback">
+          <div class="text-danger">
           {{ $errors->first('unidade_id') }}
           </div>
         @endif
@@ -120,11 +116,6 @@
         <input type="text" class="form-control" name="distrito_descricao" id="distrito_descricao" value="{{ old('distrito_descricao') ?? $paciente->unidade->distrito->nome }}" readonly>
       </div>
     </div>
-
-
-
-
-
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="cep">CEP<strong  class="text-danger">(*)</strong></label>
@@ -158,8 +149,6 @@
         <input type="text" class="form-control" name="complemento" value="{{ old('complemento') ?? $paciente->complemento }}" id="complemento">
       </div>
     </div>
-
-
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="bairro">Bairro <strong  class="text-danger">(*)</strong></label>
@@ -189,9 +178,6 @@
         @endif
       </div>
     </div>
-
-
-
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="cel1">N°&lowast; Celular<strong  class="text-danger">(*)</strong></label>
@@ -211,10 +197,8 @@
         <input type="text" class="form-control" name="email" value="{{ old('email') ?? $paciente->email }}" id="cel1">
       </div>
     </div>
-
-
     <div class="form-row">
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-3">
         <label for="inicioSintomas">Data Início Sintomas<strong  class="text-danger">(*)</strong></label>
         <input type="text" class="form-control{{ $errors->has('inicioSintomas') ? ' is-invalid' : '' }}" name="inicioSintomas" id="inicioSintomas" value="{{ old('inicioSintomas') ?? $paciente->inicioSintomas->format('d/m/Y') }}">
         @if ($errors->has('inicioSintomas'))
@@ -223,7 +207,7 @@
         </div>
         @endif
       </div>
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-3">
         <label for="tomouVacina">Tomou Vacina?<strong  class="text-danger">(*)</strong></label>
         <select class="form-control {{ $errors->has('tomouVacina') ? ' is-invalid' : '' }}" name="tomouVacina" id="tomouVacina">
           <option value="nao" {{ $paciente->tomouVacina == "nao" ? "selected":"" }}>Não</option>
@@ -236,7 +220,7 @@
         </div>
         @endif
       </div>
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-6">
         <label for="sintomasiniciais">Sintomas iniciais <strong  class="text-warning">(opcional)</strong></label>
         <select id="sintomasiniciais" name="sintomasiniciais[]" multiple="multiple">
             @foreach($sintomas as $sintoma)
@@ -260,7 +244,9 @@
             @endforeach
         </select>
       </div>
-      <div class="form-group col-md-4">
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
         <label for="comorbidades">Comorbidades <strong  class="text-warning">(opcional)</strong></label>
         <select id="comorbidades" name="comorbidades[]" multiple="multiple">
             @foreach($comorbidades as $comorbidade)
@@ -283,34 +269,6 @@
             <option value="{{$comorbidade->id}}"  {{ $selected }}>{{$comorbidade->descricao}}</option>
             @endforeach
         </select>
-      </div>
-    </div>
-
-
-    <div class="form-row">
-      <div class="form-group col-md-6">
-      <label for="doencas">Doenças de Base <strong  class="text-warning">(opcional)</strong></label>
-      <select id="doencas" name="doencas[]" multiple="multiple">
-          @foreach($doencas as $doenca)
-          @php
-            $selected = '';
-            if(old('doencas') ?? false){
-              foreach (old('doencas') as $key => $id) {
-                if($id == $doenca->id){
-                  $selected = "selected";
-                }
-              }  
-            } else {
-              foreach ($paciente->doencasBases as $key => $doencasbaseList) {
-                if($doencasbaseList->id == $doenca->id){
-                  $selected = "selected";
-                }
-              }
-            }
-            @endphp
-          <option value="{{$doenca->id}}"  {{ $selected }}>{{$doenca->descricao}}</option>
-          @endforeach
-      </select> 
       </div>
       <div class="form-group col-md-3">
         <label for="situacao">Situação</label>
@@ -350,14 +308,10 @@
         </p>
       </div>
     </div>  
-
-
     <div class="form-group">
       <label for="notas">Notas/Observações <strong  class="text-warning">(opcional)</strong></label>
       <textarea class="form-control" name="notas" id="notas" rows="3">{{ old('notas') ?? $paciente->notas }}</textarea>
     </div>
-
-
     <div class="form-row">
       <div class="form-group col-md-3">
         <label for="data_do_cadastro">Data do cadastro</label>
@@ -372,11 +326,11 @@
         <input type="text" class="form-control" name="funcionario_responsavel" value="{{ $paciente->user->name }}" readonly>
       </div> 
     </div>
-
     <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i> Alterar Dados do Paciente</button>
   </form>
 </div>
 
+@can('monitoramento-index')
 <br>
 <div class="container bg-warning text-dark">
   <p class="text-center"><strong>Monitorar Paciente</strong></p>
@@ -388,12 +342,17 @@
       <input type="hidden" id="paciente_id" name="paciente_id" value="{{ $paciente->id }}">
       <div class="form-row">
         <div class="form-group col-md-8">
-          <label for="sintomasmonitoramento">Sintomas <strong  class="text-warning">(opcional)</strong></label>
+          <label for="sintomasmonitoramento">Sintomas <strong  class="text-danger">(*)</strong></label>
           <select id="sintomasmonitoramento" name="sintomasmonitoramento[]" multiple="multiple">
               @foreach($sintomas_monitoramento as $sintoma)
               <option value="{{$sintoma->id}}">{{$sintoma->descricao}}</option>
               @endforeach
           </select>
+          @if ($errors->has('sintomasmonitoramento'))
+          <div class="text-danger">
+          {{ $errors->first('sintomasmonitoramento') }}
+          </div>
+          @endif
         </div>  
         <div class="form-group col-md-4">
           <label for="febre">Apresentando febre?<strong  class="text-danger">(*)</strong></label>
@@ -500,7 +459,7 @@
           @endif 
         </div>  
         <div class="form-group col-md-4">
-          <label for="familia">Existem pessoas vacinadas em sua casa?<strong  class="text-danger">(*)</strong></label>
+          <label for="familia">Existem pessoas doentes em sua casa?<strong  class="text-danger">(*)</strong></label>
           <select class="form-control {{ $errors->has('familia') ? ' is-invalid' : '' }}" name="familia" id="familia">
             <option value="">Selecione</option>
             <option value="nao" {{ old('familia') == 'nao' ? 'selected':'' }}>Não</option>
@@ -610,7 +569,7 @@
   </div>  
   <div class="row py-2">
     <div class="col-sm-6">
-      Existem pessoas vacinadas em sua casa?  {{ $monitoramento->familia }} 
+      Existem pessoas doentes em sua casa?  {{ $monitoramento->familia }} 
     </div>
     <div class="col-sm-6">
       Quantas? {{ $monitoramento->quantas }} 
@@ -620,6 +579,9 @@
 </div>
 
 @endforeach
+
+@endcan
+
 <br>
 <div class="container">
   <div class="float-right">
@@ -752,7 +714,7 @@
       templates: {
         empty: [
           '<div class="empty-message">',
-            '<p class="text-center font-weight-bold text-warning">Não foi encontrado nenhuma unidade com o texto digitado.</p>',
+            '<p class="text-center font-weight-bold text-warning">Não foi encontrado nenhum registro com o texto digitado.</p>',
           '</div>'
         ].join('\n'),
         suggestion: function(data) {

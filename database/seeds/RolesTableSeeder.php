@@ -22,8 +22,13 @@ class RolesTableSeeder extends Seeder
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'operador',
-            'description' => 'Operador',
+            'name' => 'operador1',
+            'description' => 'Operador Nível 1',
+        ]);
+
+        DB::table('roles')->insert([
+            'name' => 'operador2',
+            'description' => 'Operador Nível 2',
         ]);
 
         DB::table('roles')->insert([

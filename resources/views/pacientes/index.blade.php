@@ -198,7 +198,25 @@ $(document).ready(function(){
     $('#btnExportarCSV').on('click', function(){
         var filtro_nome = $('input[name="nome"]').val();
         var filtro_nomeMae = $('input[name="nomeMae"]').val();
-        window.open("{{ route('pacientes.export.csv') }}"  + "?nome=" + filtro_nome + "&nomeMae=" + filtro_nomeMae,"_self");
+        var filtro_unidade = $('input[name="unidade"]').val();
+        var filtro_distrito_id = $('select[name="distrito_id"]').val();
+        if (typeof filtro_distrito_id === "undefined") {
+          filtro_distrito_id = "";
+        }
+        var filtro_idadeMin = $('input[type=number][name=idadeMin]').val();
+        if (typeof filtro_idadeMin === "undefined") {
+          filtro_idadeMin = "";
+        }
+        var filtro_idadeMax = $('input[type=number][name=idadeMax]').val();
+        if (typeof filtro_idadeMax === "undefined") {
+          filtro_idadeMax = "";
+        }
+        var filtro_situacao = $('select[name="situacao"]').val();
+        if (typeof filtro_situacao === "undefined") {
+          filtro_situacao = "";
+        }
+
+        window.open("{{ route('pacientes.export.csv') }}"  + "?nome=" + filtro_nome + "&nomeMae=" + filtro_nomeMae + "&unidade=" + filtro_unidade + "&distrito_id=" + filtro_distrito_id + "&idadeMin=" + filtro_idadeMin + "&idadeMax=" + filtro_idadeMax + "&situacao=" + filtro_situacao,"_self");
     });
 
 }); 

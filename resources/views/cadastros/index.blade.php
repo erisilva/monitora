@@ -21,10 +21,36 @@
 </style>
 @endsection
 @section('content')
+
+
+@if(Session::has('create_paciente'))
 <div class="container py-3 text-center">
-    <h1>Sistema de Monitoramento da COVID</span></h1>   
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <h2><span><i class="fas fa-exclamation-circle"></i></span> {{ session('create_paciente') }}</h2>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+@endif
+
+
+<div class="container py-3 text-center">
+    <h1><span><i class="fas fa-search"></i> Consulta de Pacientes</span></h1>   
 </div>
 
+<div class="container py-3">
+
+    <form>
+        <div class="form-group">
+            <input type="text" class="form-control form-control-lg typeahead" name="pesquisa" id="pesquisa" value="" autocomplete="off">
+        </div>
+    </form>
+</div>
+
+<div class="container py-3 text-right">
+    <a href="{{ route('cadastros.create') }}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="fas fa-user-plus"></i> Cadastrar Paciente</a>  
+</div>
 
 @endsection
 
@@ -56,7 +82,7 @@ $(document).ready(function(){
       templates: {
         empty: [
           '<div class="empty-message">',
-            '<p class="text-center font-weight-bold text-warning">Não foi encontrado nenhuma unidade com o texto digitado.</p>',
+            '<p class="text-center font-weight-bold text-warning">Não foi encontrado nenhuma registro com o texto digitado.</p>',
           '</div>'
         ].join('\n'),
         suggestion: function(data) {

@@ -171,6 +171,7 @@ class PacienteController extends Controller
             'bairro' => 'required',
             'cidade' => 'required',
             'uf' => 'required',
+            'sintomasiniciais' => 'required',
             'inicioSintomas' => 'required|date_format:d/m/Y',
         ],
         [
@@ -180,6 +181,7 @@ class PacienteController extends Controller
             'cel1.required' => 'É obrigatório digitar um número de celular para contato',
             'unidade_id.required' => 'Preencha o campo de unidade',
             'tomouVacina.required' => 'Escolha uma opção',
+            'sintomasiniciais.required' => 'Escolha pelo menos um sintoma',
             'inicioSintomas.required' => 'O início dos sintomas deve ser preenchido',
         ]);
 
@@ -267,11 +269,9 @@ class PacienteController extends Controller
 
         $sintomas_monitoramento = Sintoma::orderBy('descricao', 'asc')->get();
 
-        $doencas = DoencasBase::orderBy('descricao', 'asc')->get();
-
         $monitoramentos = Monitoramento::where('paciente_id', '=', $id)->orderBy('id', 'desc')->get();
 
-        return view('pacientes.edit', compact('paciente', 'comorbidades', 'sintomas', 'doencas', 'sintomas_monitoramento', 'monitoramentos'));
+        return view('pacientes.edit', compact('paciente', 'comorbidades', 'sintomas', 'sintomas_monitoramento', 'monitoramentos'));
     }
 
     /**
@@ -353,21 +353,6 @@ class PacienteController extends Controller
             }
         }
 
-        // remove todos os sintomas do cadastro (sintomas iniciais)
-        $doencasBases = $paciente->doencasBases;
-        if(count($doencasBases)){
-            foreach ($doencasBases as $key => $value) {
-               $paciente->doencasBases()->detach($value->id);
-            }
-        }
-
-        // vincula as sintomas do cadastro (sintomas iniciais)
-        if(isset($paciente_input['doencas']) && count($paciente_input['doencas'])){
-            foreach ($paciente_input['doencas'] as $key => $value) {
-               $paciente->doencasBases()->attach($value);
-            }
-        }
-
 
         $paciente->update($paciente_input);
         
@@ -444,8 +429,6 @@ class PacienteController extends Controller
 
             DB::raw('( select group_concat(b.descricao) from comorbidade_paciente a inner join comorbidades b on a.comorbidade_id = b.id where a.paciente_id = pacientes.id) as comorbidades'),
 
-            DB::raw('(select group_concat(b.descricao) from doencas_base_paciente a inner join doencas_bases b on a.doencas_base_id = b.id where a.paciente_id = pacientes.id) as doencas_base'),
-
             'pacientes.monitorando as monitorando',
 
             'pacientes.cel1', 
@@ -476,6 +459,28 @@ class PacienteController extends Controller
             $pacientes = $pacientes->where('pacientes.nomeMae', 'like', '%' . request('nomeMae') . '%');
         }
 
+        if (request()->has('unidade')){
+            $pacientes = $pacientes->where('unidades.descricao', 'like', '%' . request('unidade') . '%');
+        }
+
+        if (request()->has('distrito_id')){
+            if (request('distrito_id') != ""){
+                $pacientes = $pacientes->where('unidades.distrito_id', '=', request('distrito_id'));
+            }
+        }
+
+        if (request()->has('idadeMin')){
+            if (request('idadeMin') != ""){
+                $pacientes = $pacientes->where('pacientes.idade', '>=', request('idadeMin'));
+            }
+        } 
+
+        if (request()->has('idadeMax')){
+            if (request('idadeMax') != ""){
+                $pacientes = $pacientes->where('pacientes.idade', '<=', request('idadeMax'));
+            }
+        }
+
         $pacientes = $pacientes->orderBy('nome', 'asc');
 
         $list = $pacientes->get()->toArray();
@@ -498,4 +503,34 @@ class PacienteController extends Controller
 
         return Response::stream($callback, 200, $headers);
     }    
+
+    /**
+     * Função de autocompletar para ser usada pelo typehead
+     *
+     * @param  
+     * @return json
+     */
+    public function autocomplete(Request $request)
+    {
+        $pacientes = DB::table('pacientes');
+
+
+        // select
+        $pacientes = $pacientes->select(
+            'pacientes.nome as text', 
+            'pacientes.id as value',
+            'pacientes.nomeMae as mae',
+            DB::raw('DATE_FORMAT(pacientes.nascimento, \'%d/%m/%Y\') AS nascimento'),
+            'pacientes.idade as idade',
+        );
+        
+        //where
+        $pacientes = $pacientes->where("pacientes.nome","LIKE","%{$request->input('query')}%");
+
+        //get
+        $pacientes = $pacientes->get();
+
+        return response()->json($pacientes, 200, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
+    }
+
 }

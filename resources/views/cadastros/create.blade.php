@@ -28,13 +28,13 @@
 <div class="container-fluid">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('pacientes.index') }}">Lista de Pacientes</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('cadastros.index') }}">Cadastro de Pacientes</a></li>
       <li class="breadcrumb-item active" aria-current="page">Novo Registro</li>
     </ol>
   </nav>
 </div>
 <div class="container">
-  <form method="POST" action="{{ route('pacientes.store') }}">
+  <form method="POST" action="{{ route('cadastros.store') }}">
     @csrf
     <div class="form-row">
       <div class="form-group col-md-5">
@@ -80,7 +80,7 @@
         <input type="text" class="form-control typeahead {{ $errors->has('unidade_id') ? ' is-invalid' : '' }}" name="unidade_descricao" id="unidade_descricao" value="{{ old('unidade_descricao') ?? '' }}" autocomplete="off">       
         <input type="hidden" id="unidade_id" name="unidade_id" value="{{ old('unidade_id') ?? '' }}">
         @if ($errors->has('unidade_id'))
-          <div class="text-danger">
+          <div  class="text-danger">
           {{ $errors->first('unidade_id') }}
           </div>
         @endif
@@ -88,7 +88,7 @@
       <div class="form-group col-md-4">
         <label for="distrito_descricao">Distrito</label>
         <input type="text" class="form-control" name="distrito_descricao" id="distrito_descricao" value="" readonly>
-      </div> 
+      </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-2">
@@ -196,7 +196,7 @@
         @endif    
       </div>
       <div class="form-group col-md-4">
-        <label for="sintomasiniciais">Sintomas iniciais <strong  class="text-danger">(*)</strong></label>
+        <label for="sintomasiniciais">Sintomas Iniciais <strong  class="text-danger">(*)</strong></label>
         <select id="sintomasiniciais" name="sintomasiniciais[]" multiple="multiple">
             @foreach($sintomas as $sintoma)
             <option value="{{$sintoma->id}}">{{$sintoma->descricao}}</option>
@@ -206,7 +206,7 @@
         <div class="text-danger">
         {{ $errors->first('sintomasiniciais') }}
         </div>
-        @endif 
+        @endif
       </div>
       <div class="form-group col-md-4">
         <label for="comorbidades">Comorbidades <strong  class="text-warning">(opcional)</strong></label>
@@ -224,7 +224,7 @@
     <button type="submit" class="btn btn-primary"><i class="fas fa-plus-square"></i> Incluir Paciente</button>
   </form>
   <div class="float-right">
-    <a href="{{ route('pacientes.index') }}" class="btn btn-secondary btn-sm" role="button"><i class="fas fa-long-arrow-alt-left"></i> Voltar</i></a>
+    <a href="{{ route('cadastros.index') }}" class="btn btn-secondary btn-sm" role="button"><i class="fas fa-long-arrow-alt-left"></i> Voltar</i></a>
   </div>
 </div>
 @endsection
@@ -343,7 +343,7 @@
       templates: {
         empty: [
           '<div class="empty-message">',
-            '<p class="text-center font-weight-bold text-warning">Não foi encontrado nenhum registro com o texto digitado.</p>',
+            '<p class="text-center font-weight-bold text-warning">Não foi encontrado nenhuma unidade com o texto digitado.</p>',
           '</div>'
         ].join('\n'),
         suggestion: function(data) {
