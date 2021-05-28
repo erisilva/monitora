@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SintomasCadastrosTableSeeder::class);
         $this->call(DoencasBasesTableSeeder::class);
         $this->call(ComorbidadesTableSeeder::class);
+        $this->call(RtpcrsTableSeeder::class);
         
 
 

@@ -167,12 +167,11 @@
         <input type="text" class="form-control" name="cel2" id="cel2" value="{{ old('cel2') ?? '' }}">
       </div>
       <div class="form-group col-md-4">
-        <label for="email">E-mail <strong  class="text-warning">(opcional)</strong></label>
-        <input type="text" class="form-control" name="email" value="{{ old('email') ?? '' }}">
+
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-4">
         <label for="inicioSintomas">Data Início Sintomas<strong  class="text-danger">(*)</strong></label>
         <input type="text" class="form-control{{ $errors->has('inicioSintomas') ? ' is-invalid' : '' }}" name="inicioSintomas" id="inicioSintomas" value="{{ old('inicioSintomas') ?? '' }}" autocomplete="off">
         @if ($errors->has('inicioSintomas'))
@@ -181,21 +180,27 @@
         </div>
         @endif
       </div>
-      <div class="form-group col-md-2">
-        <label for="tomouVacina">Tomou Vacina?<strong  class="text-danger">(*)</strong></label>
-        <select class="form-control {{ $errors->has('tomouVacina') ? ' is-invalid' : '' }}" name="tomouVacina" id="tomouVacina">
+      <div class="form-group col-md-4">
+        <label for="testeRapido">Realizou Teste Rápido/Antígeno?<strong  class="text-danger">(*)</strong></label>
+        <select class="form-control {{ $errors->has('testeRapido') ? ' is-invalid' : '' }}" name="testeRapido" id="testeRapido">
           <option value="">Selecione</option>
-          <option value="nao" {{ old("tomouVacina") == "nao" ? "selected":"" }}>Não</option>
-          <option value="sim, 1 dose"  {{ old("tomouVacina") == "sim, 1 dose" ? "selected":"" }}>Sim, 1 dose</option>      
-          <option value="sim, 2 doses"  {{ old("tomouVacina") == "sim, 2 doses" ? "selected":"" }}>Sim, 2 doses</option>
+          <option value="nao" {{ old("testeRapido") == "nao" ? "selected":"" }}>Não Coletou</option>
+          <option value="positivo"  {{ old("testeRapido") == "positivo" ? "selected":"" }}>Positivo</option>      
+          <option value="negativo"  {{ old("testeRapido") == "negativo" ? "selected":"" }}>Negativo</option>
         </select>
-        @if ($errors->has('tomouVacina'))
+        @if ($errors->has('testeRapido'))
         <div class="invalid-feedback">
-        {{ $errors->first('tomouVacina') }}
+        {{ $errors->first('testeRapido') }}
         </div>
-        @endif    
+        @endif  
       </div>
       <div class="form-group col-md-4">
+
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
         <label for="sintomasiniciais">Sintomas Iniciais <strong  class="text-danger">(*)</strong></label>
         <select id="sintomasiniciais" name="sintomasiniciais[]" multiple="multiple">
             @foreach($sintomas as $sintoma)
@@ -208,15 +213,21 @@
         </div>
         @endif
       </div>
-      <div class="form-group col-md-4">
-        <label for="comorbidades">Comorbidades <strong  class="text-warning">(opcional)</strong></label>
+      <div class="form-group col-md-6">
+        <label for="comorbidades">Comorbidades  <strong  class="text-danger">(*)</strong></label>
         <select id="comorbidades" name="comorbidades[]" multiple="multiple">
             @foreach($comorbidades as $comorbidade)
             <option value="{{$comorbidade->id}}">{{$comorbidade->descricao}}</option>
             @endforeach
         </select>
-      </div>
-    </div>
+        @if ($errors->has('comorbidades'))
+        <div class="text-danger">
+        {{ $errors->first('comorbidades') }}
+        </div>
+        @endif       
+      </div>  
+    </div>  
+
     <div class="form-group">
       <label for="notas">Notas/Observações <strong  class="text-warning">(opcional)</strong></label>
       <textarea class="form-control" name="notas" id="notas" rows="3">{{ old('notas') ?? '' }}</textarea>

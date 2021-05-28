@@ -10,7 +10,7 @@ class Paciente extends Model
 	use SoftDeletes;
 
     protected $fillable = [
-        'nome', 'nomeMae', 'nascimento', 'cns', 'idade', 'cep', 'logradouro', 'bairro', 'numero', 'complemento', 'cidade', 'uf', 'cel1', 'cel2', 'email', 'unidade_id', 'ultimoMonitoramento', 'tomouVacina',  'inicioSintomas', 'monitorando', 'user_id', 'notas',
+        'nome', 'nomeMae', 'nascimento', 'cns', 'idade', 'cep', 'logradouro', 'bairro', 'numero', 'complemento', 'cidade', 'uf', 'cel1', 'cel2', 'email', 'unidade_id', 'ultimoMonitoramento', 'tomouVacina',  'inicioSintomas', 'monitorando', 'user_id', 'notas', 'testeRapido', 'rtpcr_id'
     ];
 
     protected $dates = ['nascimento', 'ultimoMonitoramento', 'inicioSintomas', 'created_at', 'deleted_at'];
@@ -38,6 +38,11 @@ class Paciente extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    public function rtpcr()
+    {
+        return $this->belongsTo('App\Rtpcr');
     }
 
     public function monitoramento()

@@ -163,7 +163,7 @@ class PacienteController extends Controller
             'nomeMae' => 'required',
             'nascimento' => 'required|date_format:d/m/Y',
             'unidade_id' => 'required',
-            'tomouVacina' => 'required',
+            'testeRapido' => 'required',
             'cel1' => 'required',
             'cep' => 'required',
             'logradouro' => 'required',
@@ -172,6 +172,7 @@ class PacienteController extends Controller
             'cidade' => 'required',
             'uf' => 'required',
             'sintomasiniciais' => 'required',
+            'comorbidades' => 'required',
             'inicioSintomas' => 'required|date_format:d/m/Y',
         ],
         [
@@ -180,11 +181,11 @@ class PacienteController extends Controller
             'nascimento.required' => 'A data de nascimento é obrigatória',
             'cel1.required' => 'É obrigatório digitar um número de celular para contato',
             'unidade_id.required' => 'Preencha o campo de unidade',
-            'tomouVacina.required' => 'Escolha uma opção',
+            'testeRapido.required' => 'Escolha uma opção',
             'sintomasiniciais.required' => 'Escolha pelo menos um sintoma',
+            'comorbidades.required' => 'Escolha pelo menos uma comorbidade',
             'inicioSintomas.required' => 'O início dos sintomas deve ser preenchido',
         ]);
-
 
         $paciente = $request->all();
 
@@ -198,6 +199,10 @@ class PacienteController extends Controller
 
         // coloca a situação do monitoramento como não monitorado
         $paciente['monitorando'] = 'nao';
+
+        // coloca a situacao do rt-pcr que é um teste, defaul é 1, não monitorado
+        // então indica que ainda não existe essa informação no cadastro do paciente
+        $paciente['rtpcr_id'] = 1;
 
         // ajuste de data de nascimento
         $dataFormatadaMysql = Carbon::createFromFormat('d/m/Y', request('nascimento'))->format('Y-m-d');
@@ -288,7 +293,7 @@ class PacienteController extends Controller
             'nomeMae' => 'required',
             'nascimento' => 'required|date_format:d/m/Y',
             'unidade_id' => 'required',
-            'tomouVacina' => 'required',
+            'testeRapido' => 'required',
             'cel1' => 'required',
             'cep' => 'required',
             'logradouro' => 'required',
@@ -296,6 +301,8 @@ class PacienteController extends Controller
             'bairro' => 'required',
             'cidade' => 'required',
             'uf' => 'required',
+            'sintomasiniciais' => 'required',
+            'comorbidades' => 'required',
             'inicioSintomas' => 'required|date_format:d/m/Y',
         ],
         [
@@ -304,7 +311,9 @@ class PacienteController extends Controller
             'nascimento.required' => 'A data de nascimento é obrigatória',
             'cel1.required' => 'É obrigatório digitar um número de celular para contato',
             'unidade_id.required' => 'Preencha o campo de unidade',
-            'tomouVacina.required' => 'Escolha uma opção',
+            'testeRapido.required' => 'Escolha uma opção',
+            'sintomasiniciais.required' => 'Escolha pelo menos um sintoma',
+            'comorbidades.required' => 'Escolha pelo menos uma comorbidade',
             'inicioSintomas.required' => 'O início dos sintomas deve ser preenchido',
         ]);
 
@@ -357,6 +366,8 @@ class PacienteController extends Controller
         $paciente->update($paciente_input);
         
         Session::flash('edited_paciente', 'Cadastro do paciente foi alterado com sucesso!');
+
+        // $request->session()->flash('edited_paciente', 'Cadastro do paciente foi alterado com sucesso!');
 
         return redirect(route('pacientes.edit', $id));
     }

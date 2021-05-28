@@ -42,7 +42,11 @@ class CreatePacientesTable extends Migration
 
             // dados iniciais de monitoramento
             $table->datetime('ultimoMonitoramento')->nullable();
-            $table->string('tomouVacina'); // pode ser: não, 1 dose, 2 doses
+            // $table->string('tomouVacina'); // pode ser: não, 1 dose, 2 doses, campo mudado para o monitoramento
+            $table->string('testeRapido'); // pode ser: não, positivo, negativo
+            // Marca como está o exame de rt-pcr do paciente    
+            $table->bigInteger('rtpcr_id')->unsigned();
+
             $table->date('inicioSintomas');
             // iniciar monitoramento - Não monitorado, Monitorando, Finalizado
             // finalizar monitoramento,
@@ -61,6 +65,7 @@ class CreatePacientesTable extends Migration
             // fks
             $table->foreign('unidade_id')->references('id')->on('unidades')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('rtpcr_id')->references('id')->on('rtpcrs')->onDelete('cascade');
         });
     }
 
@@ -74,6 +79,7 @@ class CreatePacientesTable extends Migration
         Schema::table('pacientes', function (Blueprint $table) {
             $table->dropForeign('pacientes_unidade_id_foreign');
             $table->dropForeign('pacientes_user_id_foreign');
+            $table->dropForeign('pacientes_rtpcr_id_foreign');
 
             $table->dropSoftDeletes();
         });
