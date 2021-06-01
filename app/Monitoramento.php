@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Monitoramento extends Model
 {
 protected $fillable = [
-        'paciente_id', 'febre', 'diabetico', 'glicemia', 'teste', 'resultado', 'historico', 'user_id', 'saude', 'familia', 'quantas', '', 
+        'paciente_id', 'febre', 'diabetico', 'glicemia', 'teste', 'resultado', 'historico', 'user_id', 'saude', 'familia', 'quantas', 'tomouVacina', 'rtpcr_id',
     ];
 
     protected $dates = ['created_at'];
@@ -25,5 +25,10 @@ protected $fillable = [
     public function paciente()
     {
         return $this->belongsTo('App\Paciente');
-    }   
+    }
+
+    public function rtpcr()
+    {
+        return $this->belongsTo('App\Rtpcr');
+    }      
 }

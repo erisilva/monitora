@@ -99,8 +99,8 @@ class MonitoramentoController extends Controller
             'febre' => 'required',
             'diabetico' => 'required',
             'glicemia' => 'required',
-            'teste' => 'required',
-            'resultado' => 'required',
+            'rtpcr_id' => 'required',
+            'tomouVacina' => 'required',
             'saude' => 'required',
             'familia' => 'required',
             'acao' => 'required',
@@ -110,8 +110,8 @@ class MonitoramentoController extends Controller
             'febre.required' => 'Campo obrigatório',
             'diabetico.required' => 'Campo obrigatório',
             'glicemia.required' => 'Campo obrigatório',
-            'teste.required' => 'Campo obrigatório',
-            'resultado.required' => 'Campo obrigatório',
+            'rtpcr_id.required' => 'Campo obrigatório',
+            'tomouVacina.required' => 'Campo obrigatório',
             'saude.required' => 'Campo obrigatório',
             'familia.required' => 'Campo obrigatório',
             'acao.required' => 'Campo obrigatório',
@@ -138,6 +138,7 @@ class MonitoramentoController extends Controller
         if ($monitoramento['acao'] <> 'nao' ) {
             $paciente->monitorando = $monitoramento['acao'];
         }
+        $paciente->rtpcr_id = $monitoramento['rtpcr_id'];
         $paciente->save();
 
 

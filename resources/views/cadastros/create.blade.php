@@ -67,7 +67,7 @@
     </div>
     <div class="form-row">
       <div class="form-group col-md-3">
-        <label for="cns">CNS<strong  class="text-warning">(Opcional)</strong></label>
+        <label for="cns">CNS/CPF <strong  class="text-warning">(Opcional)</strong></label>
         <input type="text" class="form-control{{ $errors->has('cns') ? ' is-invalid' : '' }}" name="cns" value="{{ old('cns') ?? '' }}">
         @if ($errors->has('cns'))
         <div class="invalid-feedback">

@@ -10,7 +10,7 @@ class Paciente extends Model
 	use SoftDeletes;
 
     protected $fillable = [
-        'nome', 'nomeMae', 'nascimento', 'cns', 'idade', 'cep', 'logradouro', 'bairro', 'numero', 'complemento', 'cidade', 'uf', 'cel1', 'cel2', 'email', 'unidade_id', 'ultimoMonitoramento', 'tomouVacina',  'inicioSintomas', 'monitorando', 'user_id', 'notas', 'testeRapido', 'rtpcr_id'
+        'nome', 'nomeMae', 'nascimento', 'cns', 'idade', 'cep', 'logradouro', 'bairro', 'numero', 'complemento', 'cidade', 'uf', 'cel1', 'cel2', 'email', 'unidade_id', 'ultimoMonitoramento',  'inicioSintomas', 'monitorando', 'user_id', 'notas', 'testeRapido', 'rtpcr_id'
     ];
 
     protected $dates = ['nascimento', 'ultimoMonitoramento', 'inicioSintomas', 'created_at', 'deleted_at'];

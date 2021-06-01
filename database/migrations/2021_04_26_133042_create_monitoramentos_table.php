@@ -23,8 +23,11 @@ class CreateMonitoramentosTable extends Migration
             $table->string('diabetico'); // sim ou não
             $table->string('glicemia'); // Não, Menos de 200, 200 a 300, Mais de 350, Não Atendeu
             // doenças de base
-            $table->string('teste'); // Sim, não, não sabe
-            $table->string('resultado'); // resultado do teste: Positivo, negativo, indeterminado, não sabe
+            //$table->string('teste'); // Sim, não, não sabe
+            // Marca como está o exame de rt-pcr do paciente    
+            $table->bigInteger('rtpcr_id')->unsigned(); // nesse caso o indice 1 não será usado
+            $table->string('tomouVacina'); //"Não tomou", "Tomou 1 dose"; "Tomou 2 doses", "Nao Sabe" e não atendeu
+            //$table->string('resultado'); // resultado do teste: Positivo, negativo, indeterminado, não sabe
             $table->text('historico')->nullable();  // historico clínico
             // operador que fez o cadastro
             $table->bigInteger('user_id')->unsigned();
@@ -36,6 +39,7 @@ class CreateMonitoramentosTable extends Migration
             $table->timestamps();
 
             // fks
+            $table->foreign('rtpcr_id')->references('id')->on('rtpcrs')->onDelete('cascade');
             $table->foreign('paciente_id')->references('id')->on('pacientes')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
@@ -51,6 +55,7 @@ class CreateMonitoramentosTable extends Migration
         Schema::table('monitoramentos', function (Blueprint $table) {
             $table->dropForeign('monitoramentos_paciente_id_foreign');
             $table->dropForeign('monitoramentos_user_id_foreign');
+            $table->dropForeign('monitoramentos_rtpcr_id_foreign');
         });
         Schema::dropIfExists('monitoramentos');
     }

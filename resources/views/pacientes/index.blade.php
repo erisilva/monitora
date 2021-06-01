@@ -47,6 +47,8 @@
                 <th scope="col">Distrito</th>
                 <th scope="col">Situação</th>
                 <th scope="col">Quando</th>
+                <th scope="col">Teste Rápido</th>
+                <th scope="col">RT-PCR</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -87,6 +89,20 @@
                 @else
                   <td><strong>Monitorado {{ $paciente->ultimoMonitoramento->diffForHumans() }}</strong></td>
                 @endif
+
+                @php
+                if ($paciente->testeRapido == 'nao') {
+                  $teste = 'Não Coletado';
+                }
+                if ($paciente->testeRapido == 'positivo') {
+                  $teste = 'Positivo';
+                }
+                if ($paciente->testeRapido == 'negativo') {
+                  $teste = 'Negativo';
+                }
+                @endphp
+                <td>{{$teste}}</td>
+                <td>{{$paciente->rtpcr->descricao}}</td>
                 <td>
                   <div class="btn-group" role="group">
                     <a href="{{route('pacientes.edit', $paciente->id)}}" class="btn btn-primary btn-sm" role="button"><i class="fas fa-edit"></i></a>
@@ -142,7 +158,6 @@
                 </select>
               </div>
             </div>
-
             <div class="form-row">
               <div class="form-group col-md-3">
                 <label for="idadeMin">Idade (Mínima)</label>
@@ -153,6 +168,17 @@
                 <input type="number" class="form-control" id="idadeMax" name="idadeMax" value="{{request()->input('idadeMax')}}">
               </div>
               <div class="form-group col-md-6">
+                <label for="rtpcr_id">RT-PCR</label>
+                <select class="form-control" name="rtpcr_id" id="rtpcr_id">
+                  <option value="">Mostrar todos</option>
+                  @foreach($rtpcrs as $rtpcr)
+                  <option value="{{$rtpcr->id}}" {{ ($rtpcr->id == request()->input('rtpcr_id')) ? ' selected' : '' }} >{{$rtpcr->descricao}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
                 <label for="situacao">Situação do Paciente</label>
                 <select class="form-control" name="situacao" id="situacao">
                   <option value="" selected>Mostrar Todos</option>
@@ -162,9 +188,18 @@
                   <option value="enc">Mostrar Pacientes Monitorados Encaminhados para Unidade</option>
                   <option value="alta">Mostrar Pacientes com Alta</option>
                 </select>
+              </div> 
+
+              <div class="form-group col-md-6">
+                <label for="testeRapido">Teste Rápido</label>
+                <select class="form-control" name="testeRapido" id="testeRapido">
+                  <option value="" selected>Mostrar Todos</option>
+                  <option value="nao">Não Coletado</option>
+                  <option value="positivo">Positivo</option>
+                  <option value="negativo">Negativo</option>
+                </select>
               </div>
             </div>
-              
             <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Pesquisar</button>
               <a href="{{ route('pacientes.index') }}" class="btn btn-primary btn-sm" role="button">Limpar</a>
           </form>
@@ -211,12 +246,19 @@ $(document).ready(function(){
         if (typeof filtro_idadeMax === "undefined") {
           filtro_idadeMax = "";
         }
-        var filtro_situacao = $('select[name="situacao"]').val();
+        var filtro_situacao = $('#situacao').find('option:selected').val();
         if (typeof filtro_situacao === "undefined") {
           filtro_situacao = "";
         }
-
-        window.open("{{ route('pacientes.export.csv') }}"  + "?nome=" + filtro_nome + "&nomeMae=" + filtro_nomeMae + "&unidade=" + filtro_unidade + "&distrito_id=" + filtro_distrito_id + "&idadeMin=" + filtro_idadeMin + "&idadeMax=" + filtro_idadeMax + "&situacao=" + filtro_situacao,"_self");
+        var filtro_rtpcr_id = $('select[name="rtpcr_id"]').val();
+        if (typeof filtro_rtpcr_id === "undefined") {
+          filtro_rtpcr_id = "";
+        }
+        var filtro_testeRapido = $('select[name="testeRapido"]').val();
+        if (typeof filtro_testeRapido === "undefined") {
+          filtro_testeRapido = "";
+        }
+        window.open("{{ route('pacientes.export.csv') }}"  + "?nome=" + filtro_nome + "&nomeMae=" + filtro_nomeMae + "&unidade=" + filtro_unidade + "&distrito_id=" + filtro_distrito_id + "&idadeMin=" + filtro_idadeMin + "&idadeMax=" + filtro_idadeMax + "&situacao=" + filtro_situacao + "&rtpcr_id=" + filtro_rtpcr_id + "&testeRapido=" + filtro_testeRapido,"_self");
     });
 
 }); 

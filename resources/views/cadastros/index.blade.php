@@ -88,14 +88,17 @@ $(document).ready(function(){
         suggestion: function(data) {
             return '<div class="container py-2">' + 
                      '<div class="row">' +
-                       '<div class="col-6">' +
-                            '<h3>' + data.text + '</h3>' +
-                       '</div>' +
                        '<div class="col-4">' +
+                            '<h4>' + data.text + '</h4>' +
+                       '</div>' +
+                       '<div class="col-3">' +
                             'Mãe: ' + data.mae +
                        '</div>' +
                        '<div class="col-2">' +
                             'Nasc.: ' + data.nascimento +
+                       '</div>' +
+                       '<div class="col-3">' +
+                            '<strong>' + data.situacao + '</strong>' +
                        '</div>' +
                      '</div>' + 
                    '</div>';

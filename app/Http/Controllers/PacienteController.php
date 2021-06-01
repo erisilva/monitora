@@ -7,6 +7,7 @@ use App\Distrito;
 use App\DoencasBase;
 use App\SintomasCadastro;
 use App\Sintoma;
+use App\Rtpcr;
 use App\Comorbidade;
 use App\Monitoramento;
 use App\Perpage;
@@ -102,6 +103,18 @@ class PacienteController extends Controller
             }
         }
 
+        if (request()->has('testeRapido')){
+            if (request('testeRapido') != ""){
+                $pacientes = $pacientes->where('testeRapido', '=', request('testeRapido'));
+            }
+        }
+
+        if (request()->has('rtpcr_id')){
+            if (request('rtpcr_id') != ""){
+                $pacientes = $pacientes->where('rtpcr_id', '=', request('rtpcr_id'));
+            }
+        }
+
         // ordena
         $pacientes = $pacientes->orderBy('nome', 'asc');
 
@@ -123,12 +136,16 @@ class PacienteController extends Controller
             'distrito_id' => request('distrito_id'),
             'idadeMin' => request('idadeMin'),
             'idadeMax' => request('idadeMax'),    
+            'rtpcr_id' => request('rtpcr_id'),    
+            'testeRapido' => request('testeRapido'),    
             ]);
 
         // tabelas auxiliares usadas pelo filtro
         $distritos = Distrito::orderBy('nome', 'asc')->get();
 
-        return view('pacientes.index', compact('pacientes', 'perpages', 'distritos'));
+        $rtpcrs = Rtpcr::orderBy('id', 'desc')->get();
+
+        return view('pacientes.index', compact('pacientes', 'perpages', 'distritos', 'rtpcrs'));
     }
 
     /**
@@ -145,6 +162,7 @@ class PacienteController extends Controller
         $comorbidades = Comorbidade::orderBy('descricao', 'asc')->get();
 
         $sintomas = SintomasCadastro::orderBy('descricao', 'asc')->get();
+
 
         return view('pacientes.create', compact('comorbidades', 'sintomas'));
     }
@@ -276,7 +294,9 @@ class PacienteController extends Controller
 
         $monitoramentos = Monitoramento::where('paciente_id', '=', $id)->orderBy('id', 'desc')->get();
 
-        return view('pacientes.edit', compact('paciente', 'comorbidades', 'sintomas', 'sintomas_monitoramento', 'monitoramentos'));
+        $rtpcrs = Rtpcr::where('id', '>', 1)->orderBy('id', 'desc')->get();
+
+        return view('pacientes.edit', compact('paciente', 'comorbidades', 'sintomas', 'sintomas_monitoramento', 'monitoramentos', 'rtpcrs'));
     }
 
     /**
@@ -416,6 +436,7 @@ class PacienteController extends Controller
 
         // joins
         $pacientes = $pacientes->join('unidades', 'unidades.id', '=', 'pacientes.unidade_id');
+        $pacientes = $pacientes->join('rtpcrs', 'rtpcrs.id', '=', 'pacientes.rtpcr_id');
         $pacientes = $pacientes->join('distritos', 'distritos.id', '=', 'unidades.distrito_id');
         $pacientes = $pacientes->join('users', 'users.id', '=', 'pacientes.user_id');
 
@@ -428,13 +449,16 @@ class PacienteController extends Controller
             'pacientes.idade',
             'unidades.descricao as unidade',
             'distritos.nome as distrito',
+            
 
             DB::raw('DATE_FORMAT(pacientes.ultimoMonitoramento, \'%d/%m/%Y\') AS ultimo_monitoramento'),
             
 
             DB::raw('DATE_FORMAT(pacientes.inicioSintomas, \'%d/%m/%Y\') AS inicio_sintomas'),
 
-            'pacientes.tomouVacina as tomou_vacina',
+            'rtpcrs.descricao as RTPCR',
+            'rtpcrs.descricao as teste_rapido',
+
 
             DB::raw('(select group_concat(b.descricao) from paciente_sintomas_cadastro a inner join sintomas_cadastros b on a.sintomas_cadastro_id =b.id where a.paciente_id = pacientes.id) as sintomas_iniciais'),
 
@@ -442,9 +466,22 @@ class PacienteController extends Controller
 
             'pacientes.monitorando as monitorando',
 
+            DB::raw("
+
+                (CASE
+                    WHEN pacientes.monitorando = 'nao' THEN 'Não Monitorado'
+                    WHEN pacientes.monitorando = 'm24' THEN 'Monitorar em 24hs'
+                    WHEN pacientes.monitorando = 'm48' THEN 'Monitorar em 48hs'
+                    WHEN pacientes.monitorando = 'enc' THEN 'Encaminhado'
+                    WHEN pacientes.monitorando = 'alta' THEN 'Alta'
+                    ELSE 'erro'
+                END) as situacao
+
+                "),
+
             'pacientes.cel1', 
             'pacientes.cel2', 
-            'pacientes.email', 
+
             'pacientes.cep', 
             'pacientes.logradouro', 
             'pacientes.bairro', 
@@ -480,6 +517,12 @@ class PacienteController extends Controller
             }
         }
 
+        if (request()->has('rtpcr_id')){
+            if (request('rtpcr_id') != ""){
+                $pacientes = $pacientes->where('pacientes.rtpcr_id', '=', request('rtpcr_id'));
+            }
+        }
+
         if (request()->has('idadeMin')){
             if (request('idadeMin') != ""){
                 $pacientes = $pacientes->where('pacientes.idade', '>=', request('idadeMin'));
@@ -489,6 +532,18 @@ class PacienteController extends Controller
         if (request()->has('idadeMax')){
             if (request('idadeMax') != ""){
                 $pacientes = $pacientes->where('pacientes.idade', '<=', request('idadeMax'));
+            }
+        }
+
+        if (request()->has('situacao')){
+            if (request('situacao') != ""){
+                $pacientes = $pacientes->where('pacientes.monitorando', '=', request('situacao'));
+            }
+        }
+
+        if (request()->has('testeRapido')){
+            if (request('testeRapido') != ""){
+                $pacientes = $pacientes->where('pacientes.testeRapido', '=', request('testeRapido'));
             }
         }
 
@@ -532,11 +587,29 @@ class PacienteController extends Controller
             'pacientes.id as value',
             'pacientes.nomeMae as mae',
             DB::raw('DATE_FORMAT(pacientes.nascimento, \'%d/%m/%Y\') AS nascimento'),
+
+
+            DB::raw("
+
+                (CASE
+                    WHEN pacientes.monitorando = 'nao' THEN 'Não Monitorado'
+                    WHEN pacientes.monitorando = 'm24' THEN 'Monitorar em 24hs'
+                    WHEN pacientes.monitorando = 'm48' THEN 'Monitorar em 48hs'
+                    WHEN pacientes.monitorando = 'enc' THEN 'Encaminhado'
+                    WHEN pacientes.monitorando = 'alta' THEN 'Alta'
+                    ELSE 'erro'
+                END) as situacao
+
+                "),
+
+
             'pacientes.idade as idade',
         );
         
         //where
         $pacientes = $pacientes->where("pacientes.nome","LIKE","%{$request->input('query')}%");
+
+
 
         //get
         $pacientes = $pacientes->get();
