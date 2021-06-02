@@ -481,8 +481,8 @@
           </div>
           @endif 
         </div>  
-        <div class="form-group col-md-4">
-          <label for="familia">Existem pessoas doentes em sua casa?<strong  class="text-danger">(*)</strong></label>
+        <div class="form-group col-md-6">
+          <label for="familia">Existem pessoas com sintomas de covid em sua casa?<strong  class="text-danger">(*)</strong></label>
           <select class="form-control {{ $errors->has('familia') ? ' is-invalid' : '' }}" name="familia" id="familia">
             <option value="">Selecione</option>
             <option value="nao" {{ old('familia') == 'nao' ? 'selected':'' }}>Não</option>
@@ -496,7 +496,7 @@
           </div>
           @endif          
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-2">
           <label for="quantas">Quantas?<strong  class="text-warning">(Opcional)</strong></label>
           <input type="number" class="form-control" name="quantas" value="{{ old('quantas') ?? '' }}"> 
         </div>

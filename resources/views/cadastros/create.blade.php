@@ -214,7 +214,7 @@
         @endif
       </div>
       <div class="form-group col-md-6">
-        <label for="comorbidades">Comorbidades  <strong  class="text-danger">(*)</strong></label>
+        <label for="comorbidades">Comorbidade/Condição Prévia <strong  class="text-danger">(*)</strong></label>
         <select id="comorbidades" name="comorbidades[]" multiple="multiple">
             @foreach($comorbidades as $comorbidade)
             <option value="{{$comorbidade->id}}">{{$comorbidade->descricao}}</option>
