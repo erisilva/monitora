@@ -77,10 +77,6 @@ class SintomaController extends Controller
             abort(403, 'Acesso negado.');
         }
 
-        // consulta a tabela dos distritos
-        $comorbidades = Comorbidade::orderBy('descricao', 'asc')->get();
-        $comorbidades = Comorbidade::orderBy('descricao', 'asc')->get();
-
         return view('sintomas.create');
     }
 

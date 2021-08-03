@@ -104,6 +104,7 @@ class MonitoramentoController extends Controller
             'saude' => 'required',
             'familia' => 'required',
             'acao' => 'required',
+            'sintomasmonitoramento' => 'required',
 
         ],
         [
@@ -115,6 +116,7 @@ class MonitoramentoController extends Controller
             'saude.required' => 'Campo obrigatório',
             'familia.required' => 'Campo obrigatório',
             'acao.required' => 'Campo obrigatório',
+            'sintomasmonitoramento.required' => 'Campo obrigatório',
 
         ]);
 

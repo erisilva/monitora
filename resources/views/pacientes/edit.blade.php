@@ -536,9 +536,9 @@
 @foreach($monitoramentos as $monitoramento)
 
 <div class="container">
-  <div class="row py-2">
+  <div class="row py-2 text-light bg-dark">
     <div class="col-sm-3">
-      Data: {{ $monitoramento->created_at->format('d/m/Y') }}
+      <strong><i class="fas fa-notes-medical"></i> Data: {{ $monitoramento->created_at->format('d/m/Y') }}</strong>
     </div>
     <div class="col-sm-3">
       Hora: {{ $monitoramento->created_at->format('H:i') }}
@@ -576,10 +576,10 @@
   </div>
   <div class="row py-2">
     <div class="col-sm-4">
-      Realizou RT-PCR?  {{ $monitoramento->teste }} 
+      Tomou Vacina?  {{ $monitoramento->tomouVacina }} 
     </div>
     <div class="col-sm-4">
-      O resultado foi?  {{ $monitoramento->resultado }}
+      Realizou RT-PCR?  {{ $monitoramento->rtpcr->descricao }}
     </div>
     <div class="col-sm-4">
       Como está a sua saúde em relação a ontem?  {{ $monitoramento->saude }}
@@ -592,7 +592,7 @@
   </div>  
   <div class="row py-2">
     <div class="col-sm-6">
-      Existem pessoas doentes em sua casa?  {{ $monitoramento->familia }} 
+      Existem pessoas com sintomas de covid em sua casa?  {{ $monitoramento->familia }} 
     </div>
     <div class="col-sm-6">
       Quantas? {{ $monitoramento->quantas }} 
